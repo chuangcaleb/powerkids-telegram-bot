@@ -11,8 +11,13 @@ export function sendmessageConversation() {
 
       await ctx.reply("Please tell me the message you want to send");
 
-      const text = await conversation.form.select(["one", "two", "three"]);
-      ctx.reply(String(text));
+      ctx = await conversation.waitFor("message::bold", {
+        otherwise: async (ctxx) => {
+          ctxx.reply("please send bold");
+          await conversation.skip({ drop: true });
+        },
+      });
+      ctx.reply(ctx.message?.text as string);
 
       // while (true) {
       //   ctx = await conversation.wait();
