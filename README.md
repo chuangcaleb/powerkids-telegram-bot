@@ -1,6 +1,6 @@
 <h1 align="center">🤖 PowerKids Bot</h1>
 
-<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="https://powerkids.edu.my/images/logo.svg">
+<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="https://powerkids.edu.my/images/logo.svg" style="background-color:white">
 
 > A Telegram bot for PowerKids Kindergarten.
 
