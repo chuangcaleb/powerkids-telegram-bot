@@ -11,16 +11,9 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": [
-      "tsconfig.json"
-    ]
+    "project": ["tsconfig.json"]
   },
-  "plugins": [
-    "@typescript-eslint",
-    "prettier",
-    "unicorn",
-    "import"
-  ],
+  "plugins": ["@typescript-eslint", "prettier", "unicorn", "import"],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -29,23 +22,15 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "arrow-body-style": "off",
-    "prefer-arrow-callback": "off",
+    "prettier/prettier": ["error", { "trailingComma": "es5" }],
+    // "arrow-body-style": "off",
+    // "prefer-arrow-callback": "off",
     "consistent-return": "off",
     "import/prefer-default-export": "off",
     "import/extensions": "off",
-    "no-underscore-dangle": "off",
-    "no-restricted-syntax": [
-      "off",
-      "ForOfStatement"
-    ],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "all"
-      }
-    ],
-    "unicorn/no-array-method-this-argument": "off",
+    // "no-underscore-dangle": "off",
+    // "no-restricted-syntax": ["off", "ForOfStatement"],
+    // "unicorn/no-array-method-this-argument": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/prevent-abbreviations": [
       "error",
