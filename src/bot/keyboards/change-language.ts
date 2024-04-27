@@ -1,9 +1,9 @@
 import { InlineKeyboard } from "grammy";
 import ISO6391 from "iso-639-1";
-import { changeLanguageData } from "#root/bot/callback-data/index.js";
-import type { Context } from "#root/bot/context.js";
-import { i18n } from "#root/bot/i18n.js";
-import { chunk } from "#root/bot/helpers/keyboard.js";
+import { changeLanguageData } from "~/bot/callback-data/index.js";
+import type { Context } from "~/bot/context.js";
+import { i18n } from "~/bot/i18n.js";
+import { chunk } from "~/bot/helpers/keyboard.js";
 
 export const createChangeLanguageKeyboard = async (ctx: Context) => {
   const currentLocaleCode = await ctx.i18n.getLocale();
@@ -22,7 +22,7 @@ export const createChangeLanguageKeyboard = async (ctx: Context) => {
           code: localeCode,
         }),
       })),
-      2,
-    ),
+      2
+    )
   );
 };

@@ -12,12 +12,8 @@
     "outDir": "build",
     "rootDir": ".",
     "paths": {
-      "#root/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

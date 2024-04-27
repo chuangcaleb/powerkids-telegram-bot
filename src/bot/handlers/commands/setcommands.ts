@@ -1,8 +1,8 @@
 import { BotCommand } from "@grammyjs/types";
 import { CommandContext } from "grammy";
-import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
-import { config } from "#root/config.js";
-import type { Context } from "#root/bot/context.js";
+import { i18n, isMultipleLocales } from "~/bot/i18n.js";
+import { config } from "~/config.js";
+import type { Context } from "~/bot/context.js";
 
 function getLanguageCommand(localeCode: string): BotCommand {
   return {
@@ -47,7 +47,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
       scope: {
         type: "all_private_chats",
       },
-    },
+    }
   );
 
   if (isMultipleLocales) {
@@ -64,8 +64,8 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
           scope: {
             type: "all_private_chats",
           },
-        },
-      ),
+        }
+      )
     );
 
     await Promise.all(requests);
@@ -85,7 +85,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
         scope: {
           type: "all_group_chats",
         },
-      }),
+      })
     );
 
     await Promise.all(requests);
@@ -103,7 +103,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
         type: "chat",
         chat_id: Number(config.BOT_ADMINS),
       },
-    },
+    }
   );
 
   return ctx.reply(ctx.t("admin.commands-updated"));

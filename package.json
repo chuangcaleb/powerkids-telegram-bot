@@ -4,7 +4,7 @@
   "description": "Telegram bot starter template",
   "type": "module",
   "imports": {
-    "#root/*": "./build/src/*"
+    "~/*": "./build/src/*"
   },
   "scripts": {
     "lint": "eslint .",

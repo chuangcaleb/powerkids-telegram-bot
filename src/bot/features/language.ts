@@ -1,9 +1,9 @@
 import { Composer } from "grammy";
-import { changeLanguageData } from "#root/bot/callback-data/index.js";
-import type { Context } from "#root/bot/context.js";
-import { logHandle } from "#root/bot/helpers/logging.js";
-import { i18n } from "#root/bot/i18n.js";
-import { createChangeLanguageKeyboard } from "#root/bot/keyboards/index.js";
+import { changeLanguageData } from "~/bot/callback-data/index.js";
+import type { Context } from "~/bot/context.js";
+import { logHandle } from "~/bot/helpers/logging.js";
+import { i18n } from "~/bot/i18n.js";
+import { createChangeLanguageKeyboard } from "~/bot/keyboards/index.js";
 
 const composer = new Composer<Context>();
 
@@ -20,7 +20,7 @@ feature.callbackQuery(
   logHandle("keyboard-language-select"),
   async (ctx) => {
     const { code: languageCode } = changeLanguageData.unpack(
-      ctx.callbackQuery.data,
+      ctx.callbackQuery.data
     );
 
     if (i18n.locales.includes(languageCode)) {
@@ -30,7 +30,7 @@ feature.callbackQuery(
         reply_markup: await createChangeLanguageKeyboard(ctx),
       });
     }
-  },
+  }
 );
 
 export { composer as languageFeature };

@@ -6,18 +6,18 @@ import {
   Context,
   SessionData,
   createContextConstructor,
-} from "#root/bot/context.js";
+} from "~/bot/context.js";
 import {
   adminFeature,
   languageFeature,
   unhandledFeature,
   welcomeFeature,
-} from "#root/bot/features/index.js";
-import { errorHandler } from "#root/bot/handlers/index.js";
-import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
-import { updateLogger } from "#root/bot/middlewares/index.js";
-import { config } from "#root/config.js";
-import { logger } from "#root/logger.js";
+} from "~/bot/features/index.js";
+import { errorHandler } from "~/bot/handlers/index.js";
+import { i18n, isMultipleLocales } from "~/bot/i18n.js";
+import { updateLogger } from "~/bot/middlewares/index.js";
+import { config } from "~/config.js";
+import { logger } from "~/logger.js";
 
 type Options = {
   sessionStorage?: StorageAdapter<SessionData>;
@@ -46,7 +46,7 @@ export function createBot(token: string, options: Options = {}) {
     session({
       initial: () => ({}),
       storage: sessionStorage,
-    }),
+    })
   );
   protectedBot.use(i18n);
 
