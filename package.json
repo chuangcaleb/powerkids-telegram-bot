@@ -1,7 +1,7 @@
 {
-  "name": "telegram-bot-template",
+  "name": "powerkids-telegram-bot",
   "version": "0.1.0",
-  "description": "Telegram bot starter template",
+  "description": "Telegram bot for PowerKids Kindergarten",
   "type": "module",
   "imports": {
     "~/*": "./build/src/*"
@@ -16,7 +16,7 @@
     "start:force": "tsx ./src/main.ts",
     "prepare": "npx husky install"
   },
-  "author": "deptyped <deptyped@gmail.com>",
+  "author": "chuangcaleb <dev@chuangcaleb.com>",
   "license": "MIT",
   "private": true,
   "dependencies": {
