@@ -9,20 +9,23 @@ export function sendmessageConversation() {
     async (conversation: Conversation<Context>, ctx: Context) => {
       await conversation.run(i18n);
 
-      await ctx.reply("Please send me your name");
+      await ctx.reply("Please tell me the message you want to send");
 
-      while (true) {
-        ctx = await conversation.wait();
+      const text = await conversation.form.select(["one", "two", "three"]);
+      ctx.reply(String(text));
 
-        if (ctx.has("message:text")) {
-          ctx.chatAction = "typing";
-          await conversation.sleep(1000);
+      // while (true) {
+      //   ctx = await conversation.wait();
 
-          await ctx.reply(`Hello, ${ctx.message.text}!`);
-        } else {
-          await ctx.reply("Please send me your name");
-        }
-      }
+      //   if (ctx.has("message:text")) {
+      //     ctx.chatAction = "typing";
+      //     await conversation.sleep(1000);
+
+      //     await ctx.reply(`Hello, ${ctx.message.text}!`);
+      //   } else {
+      //     await ctx.reply("Please send me your name");
+      //   }
+      // }
     },
     SENDMESSAGE_CONVERSATION
   );

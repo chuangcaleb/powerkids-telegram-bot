@@ -29,8 +29,9 @@
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     // "no-underscore-dangle": "off",
-    // "no-restricted-syntax": ["off", "ForOfStatement"],
+    "no-restricted-syntax": ["off", "ForOfStatement"],
     // "unicorn/no-array-method-this-argument": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/prevent-abbreviations": [
       "error",

@@ -1,31 +1,20 @@
 <h1 align="center">🤖 PowerKids Bot</h1>
 
-Uses bot starter template based on [grammY](https://grammy.dev/) bot framework.
+<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="https://powerkids.edu.my/images/logo.svg">
 
-## Features
+> A Telegram bot for PowerKids Kindergarten.
 
-- Scalable structure
-- Config loading and validation
-- Internationalization, language changing
-- Graceful shutdown
-- Logger (powered by [pino](https://github.com/pinojs/pino))
-- Fast and low overhead server (powered by [fastify](https://github.com/fastify/fastify))
-- Ready-to-use deployment setups:
-  - [Docker](#docker-dockercom)
-  - [Vercel](#vercel-vercelcom)
-- Examples:
-  - [Prisma ORM](#prisma-orm-prismaio)
-  - grammY plugins:
-    - [Conversations](#grammy-conversations-grammydevpluginsconversations)
-    - [Runner](#grammy-runner-grammydevpluginsrunner)
+## Goals
+
+- Teachers can upload pictures (from their own devices) of students and select relevant student names
+- The bot will match the each selected student to their parents' Telegram ID via the school's internal registry
+- Parents will receive those pictures, notified by the mobile notifs
 
 ## Usage
 
 Follow these steps to set up and run your bot using this template:
 
-1. **Create a New Repository**
-
-    Start by creating a new repository using this template. You can do this by clicking [here](https://github.com/bot-base/telegram-bot-template/generate).
+1. **Clone New Repository**
 
 2. **Environment Variables Setup**
 
@@ -46,13 +35,13 @@ Follow these steps to set up and run your bot using this template:
     Install the required dependencies:
 
     ```bash
-    npm install
+    pnpm install
     ```
 
     Start the bot in watch mode (auto-reload when code changes):
 
     ```bash
-    npm run dev
+    pnpm run dev
     ```
 
    **Production Mode:**
@@ -60,7 +49,7 @@ Follow these steps to set up and run your bot using this template:
     Install only production dependencies (no development dependencies):
 
     ```bash
-    npm install --only=prod
+    pnpm install --only=prod
     ```
 
     Set the `NODE_ENV` environment variable to "production" in your `.env` file. Also, make sure to update `BOT_WEBHOOK` with the actual URL where your bot will receive updates.
@@ -73,19 +62,19 @@ Follow these steps to set up and run your bot using this template:
     Start the bot in production mode:
 
     ```bash
-    npm start
+    pnpm start
     # or
-    npm run start:force # if you want to skip type checking
+    pnpm run start:force # if you want to skip type checking
     ```
 
 ### List of Available Commands
 
-- `npm run lint` — Lint source code.
-- `npm run format` — Format source code.
-- `npm run typecheck` — Run type checking.
-- `npm run dev` — Start the bot in development mode.
-- `npm run start` — Start the bot.
-- `npm run start:force` — Starts the bot without type checking.
+- `pnpm run lint` — Lint source code.
+- `pnpm run format` — Format source code.
+- `pnpm run typecheck` — Run type checking.
+- `pnpm run dev` — Start the bot in development mode.
+- `pnpm run start` — Start the bot.
+- `pnpm run start:force` — Starts the bot without type checking.
 
 ### Directory Structure
 
@@ -111,133 +100,10 @@ project-root/
       └── main.ts   # Application entry point
 ```
 
-## Deploy
+## Tech
 
-### Docker ([docker.com](https://docker.com))
-
-Branch:
-[deploy/docker-compose](https://github.com/bot-base/telegram-bot-template/tree/deploy/docker-compose)
-([open diff](https://github.com/bot-base/telegram-bot-template/compare/deploy/docker-compose))
-
-Use in your project:
-
-1. Add the template repository as a remote
-
-```sh
-git remote add template git@github.com:bot-base/telegram-bot-template.git
-git remote update
-```
-
-2. Merge deployment setup
-
-```sh
-git merge template/deploy/docker-compose -X theirs --squash --no-commit --allow-unrelated-histories
-```
-
-### Vercel ([vercel.com](https://vercel.com))
-
-Branch:
-[deploy/vercel](https://github.com/bot-base/telegram-bot-template/tree/deploy/vercel)
-([open diff](https://github.com/bot-base/telegram-bot-template/compare/deploy/vercel))
-
-Use in your project:
-
-1. Add the template repository as a remote
-
-```sh
-git remote add template git@github.com:bot-base/telegram-bot-template.git
-git remote update
-```
-
-2. Merge deployment setup
-
-```sh
-git merge template/deploy/vercel -X theirs --squash --no-commit --allow-unrelated-histories
-```
-
-## Examples
-
-### Prisma ORM ([prisma.io](https://prisma.io))
-
-Branch:
-[example/orm-prisma](https://github.com/bot-base/telegram-bot-template/tree/example/orm-prisma)
-([open diff](https://github.com/bot-base/telegram-bot-template/compare/example/orm-prisma))
-
-Use in your project:
-
-1. Add the template repository as a remote
-
-```sh
-git remote add template git@github.com:bot-base/telegram-bot-template.git
-git remote update
-```
-
-2. Merge example
-
-```sh
-git merge template/example/orm-prisma -X theirs --squash --no-commit --allow-unrelated-histories
-```
-
-3. Install dependencies
-
-```sh
-npm i -D prisma
-npm i @prisma/client
-```
-
-### grammY conversations ([grammy.dev/plugins/conversations](https://grammy.dev/plugins/conversations))
-
-Branch:
-[example/plugin-conversations](https://github.com/bot-base/telegram-bot-template/tree/example/plugin-conversations)
-([open diff](https://github.com/bot-base/telegram-bot-template/compare/example/plugin-conversations))
-
-Use in your project:
-
-1. Add the template repository as a remote
-
-```sh
-git remote add template git@github.com:bot-base/telegram-bot-template.git
-git remote update
-```
-
-2. Merge example
-
-```sh
-git merge template/example/plugin-conversations -X theirs --squash --no-commit --allow-unrelated-histories
-```
-
-3. Install dependencies
-
-```sh
-npm i @grammyjs/conversations
-```
-
-### grammY runner ([grammy.dev/plugins/runner](https://grammy.dev/plugins/runner))
-
-Branch:
-[example/plugin-runner](https://github.com/bot-base/telegram-bot-template/tree/example/plugin-runner)
-([open diff](https://github.com/bot-base/telegram-bot-template/compare/example/plugin-runner))
-
-Use in your project:
-
-1. Add the template repository as a remote
-
-```sh
-git remote add template git@github.com:bot-base/telegram-bot-template.git
-git remote update
-```
-
-2. Merge example
-
-```sh
-git merge template/example/plugin-runner -X theirs --squash --no-commit --allow-unrelated-histories
-```
-
-3. Install dependencies
-
-```sh
-npm i @grammyjs/runner
-```
+- Framework: [grammY](https://grammy.dev/)
+- Template: [bot-base/telegram-bot-template](https://github.com/bot-base/telegram-bot-template)
 
 ## Environment Variables
 
