@@ -12,5 +12,6 @@ const fuse = new Fuse(REGISTRY_ARRAY, {
 });
 
 export function retrieveQueryResult(query: string) {
+  // TODO: hack to accept substring
   return fuse.search(query, { limit: LIMIT });
 }

@@ -22,10 +22,10 @@ export function sendmessageConversation() {
       const message = messageCtx.message?.text ?? "";
 
       // Get targets
-      // eslint-disable-next-line no-constant-condition
-      const students = [];
+      // TODO: allow comma/newline-delimited bulk input
+      const students: [string, number][] = [];
+      await ctx.reply("Please type the name of a student, or send /done");
       while (true) {
-        await ctx.reply("Please type the name of a student, or send /done");
         const nameCtx = await waitFor(
           conversation,
           "message:text",
@@ -37,7 +37,7 @@ export function sendmessageConversation() {
 
         // if no results
         if (queryResults.length === 0) {
-          ctx.reply("no results, please retry");
+          ctx.reply("No match found. Try full name.");
           continue;
         }
 
@@ -51,11 +51,19 @@ export function sendmessageConversation() {
 
         // if exactly 1
         const result = queryResults[0].item;
-        students.push(result[1]);
+        const oldStudentsString = students.map((s) => s[0]).join(", ");
+        const reply = [
+          `(${students.length + 1}) ${oldStudentsString} + <b>${result[0]}</b>`,
+          `Enter another name, or send /done`,
+        ].join("\n");
+        await ctx.reply(reply, { parse_mode: "HTML" });
+        students.push(result);
       }
 
-      await ctx.reply(`Sending to ${students.join(",")}: `);
-      // await ctx.reply(`Sending to ${result}: ${message}`);
+      // await ctx.reply(`Sending to ${students.join(",")}: `);
+      await ctx.reply(
+        `Sending to ${students.map((s) => s[1]).join(",")}: ${message}`
+      );
     },
     SENDMESSAGE_CONVERSATION
   );
