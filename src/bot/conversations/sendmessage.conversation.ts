@@ -2,9 +2,9 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { i18n } from "~/bot/i18n.js";
 
-export const GREETING_CONVERSATION = "greeting";
+export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
-export function greetingConversation() {
+export function sendmessageConversation() {
   return createConversation(
     async (conversation: Conversation<Context>, ctx: Context) => {
       await conversation.run(i18n);
@@ -24,6 +24,6 @@ export function greetingConversation() {
         }
       }
     },
-    GREETING_CONVERSATION
+    SENDMESSAGE_CONVERSATION
   );
 }
