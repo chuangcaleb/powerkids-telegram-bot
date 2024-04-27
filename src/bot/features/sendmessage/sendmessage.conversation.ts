@@ -26,14 +26,26 @@ export function sendmessageConversation() {
       await ctx.reply("Please type the name of a student");
       const nameCtx = await conversation.waitFor("message:text", {
         otherwise: async (ctxx) => {
-          await ctxx.reply("please send text");
+          await ctxx.reply("please send name");
           await conversation.skip({ drop: true });
         },
       });
       const name = nameCtx.message?.text ?? "";
       const queryResults = retrieveQueryResult(name);
-      if (queryResults.length === 0) ctx.reply("no results");
-      await ctx.reply(queryResults[0].item[0]);
+      // if no results
+      if (queryResults.length === 0) {
+        ctx.reply("no results, please retry");
+        return;
+      }
+      // if more than 1
+      // TODO: handle multiple with further narrowing
+      if (queryResults.length > 1) {
+        const names = queryResults.map((r) => r.item[0]).join(", ");
+        ctx.reply(`many results (${names}), please retry`);
+        return;
+      }
+      // if exactly 1
+      await ctx.reply(`Sending to ${queryResults[0].item[0]}: ${message}`);
     },
     SENDMESSAGE_CONVERSATION
   );
