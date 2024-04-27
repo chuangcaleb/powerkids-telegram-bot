@@ -1,6 +1,7 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { i18n } from "~/bot/i18n.js";
+import { REGISTRY } from "./mock-data.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -9,28 +10,20 @@ export function sendmessageConversation() {
     async (conversation: Conversation<Context>, ctx: Context) => {
       await conversation.run(i18n);
 
+      // Get message
       await ctx.reply("Please tell me the message you want to send");
 
-      ctx = await conversation.waitFor("message::bold", {
+      const messageCtx = await conversation.waitFor("message::bold", {
         otherwise: async (ctxx) => {
           ctxx.reply("please send bold");
           await conversation.skip({ drop: true });
         },
       });
-      ctx.reply(ctx.message?.text as string);
+      const message = messageCtx.message?.text ?? "";
 
-      // while (true) {
-      //   ctx = await conversation.wait();
-
-      //   if (ctx.has("message:text")) {
-      //     ctx.chatAction = "typing";
-      //     await conversation.sleep(1000);
-
-      //     await ctx.reply(`Hello, ${ctx.message.text}!`);
-      //   } else {
-      //     await ctx.reply("Please send me your name");
-      //   }
-      // }
+      // Get targets
+      await ctx.reply("Please select the students");
+      ctx.api.sendMessage(REGISTRY.Chuang, message);
     },
     SENDMESSAGE_CONVERSATION
   );

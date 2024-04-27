@@ -19,8 +19,8 @@ import { i18n, isMultipleLocales } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";
 import { logger } from "~/logger.js";
-import { sendmessageConversation } from "./conversations/sendmessage.conversation.js";
-import { sendmessageFeature } from "./features/sendmessage.js";
+import { sendmessageConversation } from "./features/sendmessage/sendmessage.conversation.js";
+import { sendmessageFeature } from "./features/sendmessage/sendmessage.js";
 
 type Options = {
   sessionStorage?: StorageAdapter<SessionData>;
