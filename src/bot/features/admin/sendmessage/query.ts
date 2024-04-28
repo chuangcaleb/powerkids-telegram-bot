@@ -1,10 +1,11 @@
 import Fuse, { FuseResult } from "fuse.js";
 import { REGISTRY_ARRAY, Student } from "./mock-data.js";
 
+// config
 const THRESHOLD = 0.3;
 const LIMIT = 3;
 
-function getQueryResults(
+export function getQueryResults(
   query: string,
   ignoreList: FuseResult<Student>[] = []
 ) {
@@ -13,12 +14,14 @@ function getQueryResults(
     (_, index) => !ignoreIndexes.has(index)
   );
 
+  // instantiate fuse
   const fuse = new Fuse(filteredRegistry, {
     threshold: THRESHOLD,
     keys: [{ name: "name", getFn: (pair) => pair[0] }],
     ignoreLocation: true,
   });
 
+  // search
   const results = fuse.search(query, { limit: LIMIT });
 
   // if one or no results, return
@@ -34,5 +37,3 @@ function getQueryResults(
   // else, return all results
   return results;
 }
-
-export { getQueryResults };
