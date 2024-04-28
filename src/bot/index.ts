@@ -8,17 +8,11 @@ import {
   SessionData,
   createContextConstructor,
 } from "~/bot/context.js";
-import {
-  adminFeatures,
-  languageFeature,
-  unhandledFeature,
-  welcomeFeature,
-} from "~/bot/features/index.js";
-import { i18n, isMultipleLocales } from "~/bot/i18n.js";
+import { features, unhandledFeature } from "~/bot/features/index.js";
+import { i18n } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";
 import { logger } from "~/logger.js";
-import { helpFeature } from "./features/help.js";
 import { errorHandler } from "./helpers/error-handler.js";
 
 type Options = {
@@ -54,13 +48,7 @@ export function createBot(token: string, options: Options = {}) {
   protectedBot.use(conversations());
 
   // Handlers
-  protectedBot.use(welcomeFeature);
-  protectedBot.use(helpFeature);
-  protectedBot.use(adminFeatures);
-
-  if (isMultipleLocales) {
-    protectedBot.use(languageFeature);
-  }
+  protectedBot.use(features);
 
   // must be the last handler
   protectedBot.use(unhandledFeature);

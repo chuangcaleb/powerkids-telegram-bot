@@ -22,7 +22,7 @@ feature.command("help", logHandle("command-start"), async (ctx) => {
   const privateCommands = getPrivateChatCommands(locale);
   const adminCommands = getPrivateChatAdminCommands(locale);
   const message = [
-    "Official Telegram bot of [PowerKids Kindergarten](https://powerkids.edu.my)\n",
+    "Official [PowerKids Kindergarten](https://powerkids.edu.my) Telegram Bot\n",
     composeCommandList(privateCommands),
     !!adminCommands &&
       `\n*Admin commands*\n${composeCommandList(adminCommands)}`,
