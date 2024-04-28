@@ -13,8 +13,6 @@ const composer = new Composer<Context>();
 
 const feature = composer.chatType("private").filter(isAdmin);
 
-feature.use(sendmessageConversation());
-
 feature.command(
   "setcommands",
   logHandle("command-setcommands"),
@@ -22,13 +20,13 @@ feature.command(
   setCommandsHandler
 );
 
-feature.command(
-  "sendmessage",
-  logHandle("command-sendmessage"),
-  chatAction("typing"),
-  (ctx) => {
-    return ctx.conversation.enter(SENDMESSAGE_CONVERSATION);
-  }
-);
+feature
+  .use(sendmessageConversation())
+  .command(
+    "sendmessage",
+    logHandle("command-sendmessage"),
+    chatAction("typing"),
+    (ctx) => ctx.conversation.enter(SENDMESSAGE_CONVERSATION)
+  );
 
 export { composer as adminFeatures };
