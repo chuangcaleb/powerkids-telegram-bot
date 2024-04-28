@@ -14,7 +14,6 @@ export function sendmessageConversation() {
       // Get message
       await ctx.reply("Enter the message you want to send");
       const messageCtx = await waitFor(conversation, "msg:text");
-      if (!messageCtx) return;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const message = messageCtx.message?.text ?? "";
 
@@ -30,7 +29,6 @@ export function sendmessageConversation() {
 
       while (true) {
         const nameCtx = await waitFor(conversation, "msg:text");
-        if (!nameCtx) return;
         const name = nameCtx.message?.text ?? "";
         if (name === "/done") {
           if (students.length > 0) break;
@@ -69,9 +67,8 @@ export function sendmessageConversation() {
       }
 
       // await nameCtx.reply(`Sending to ${students.join(",")}: `);
-      await ctx.reply(
-        `Sending to ${students.map((s) => s[1]).join(",")}: ${message}`
-      );
+      await ctx.reply(`Sending to ${students.map((s) => s[1]).join(",")}`);
+      await ctx.reply(`The message is:\n\n${message}`);
     },
     SENDMESSAGE_CONVERSATION
   );

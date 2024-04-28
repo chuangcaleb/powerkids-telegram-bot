@@ -4,6 +4,8 @@ import { i18n, isMultipleLocales } from "~/bot/i18n.js";
 import { config } from "~/config.js";
 import type { Context } from "~/bot/context.js";
 
+const DEFAULT_LANGUAGE_CODE = "en";
+
 function getLanguageCommand(localeCode: string): BotCommand {
   return {
     command: "language",
@@ -33,74 +35,61 @@ function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
   ];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getGroupChatCommands(localeCode: string): BotCommand[] {
-  return [];
+function getPrivateAndLanguageCommands(localeCode: string): BotCommand[] {
+  return [
+    ...getPrivateChatCommands(localeCode),
+    ...(isMultipleLocales ? [getLanguageCommand(DEFAULT_LANGUAGE_CODE)] : []),
+  ];
 }
 
-export async function setCommandsHandler(ctx: CommandContext<Context>) {
-  const DEFAULT_LANGUAGE_CODE = "en";
+// * No plans for group chat
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// function getGroupChatCommands(localeCode: string): BotCommand[] {
+//   return [];
+// }
 
+export async function setCommandsHandler(ctx: CommandContext<Context>) {
   // set private chat commands
   await ctx.api.setMyCommands(
-    [
-      ...getPrivateChatCommands(DEFAULT_LANGUAGE_CODE),
-      ...(isMultipleLocales ? [getLanguageCommand(DEFAULT_LANGUAGE_CODE)] : []),
-    ],
+    getPrivateAndLanguageCommands(DEFAULT_LANGUAGE_CODE),
     {
-      scope: {
-        type: "all_private_chats",
-      },
+      scope: { type: "all_private_chats" },
     }
   );
 
   if (isMultipleLocales) {
     const requests = i18n.locales.map((code) =>
-      ctx.api.setMyCommands(
-        [
-          ...getPrivateChatCommands(code),
-          ...(isMultipleLocales
-            ? [getLanguageCommand(DEFAULT_LANGUAGE_CODE)]
-            : []),
-        ],
-        {
-          language_code: code,
-          scope: {
-            type: "all_private_chats",
-          },
-        }
-      )
-    );
-
-    await Promise.all(requests);
-  }
-
-  // set group chat commands
-  await ctx.api.setMyCommands(getGroupChatCommands(DEFAULT_LANGUAGE_CODE), {
-    scope: {
-      type: "all_group_chats",
-    },
-  });
-
-  if (isMultipleLocales) {
-    const requests = i18n.locales.map((code) =>
-      ctx.api.setMyCommands(getGroupChatCommands(code), {
+      ctx.api.setMyCommands(getPrivateAndLanguageCommands(code), {
         language_code: code,
-        scope: {
-          type: "all_group_chats",
-        },
+        scope: { type: "all_private_chats" },
       })
     );
 
     await Promise.all(requests);
   }
 
+  // * No plans for group chat
+  // // set group chat commands
+  // await ctx.api.setMyCommands(getGroupChatCommands(DEFAULT_LANGUAGE_CODE), {
+  //   scope: { type: "all_group_chats" },
+  // });
+  //
+  // if (isMultipleLocales) {
+  //   const requests = i18n.locales.map((code) =>
+  //     ctx.api.setMyCommands(getGroupChatCommands(code), {
+  //       language_code: code,
+  //       scope: { type: "all_group_chats" },
+  //     })
+  //   );
+
+  //   await Promise.all(requests);
+  // }
+
   // set private chat commands for owner
   await ctx.api.setMyCommands(
     [
-      ...getPrivateChatCommands(DEFAULT_LANGUAGE_CODE),
       ...getPrivateChatAdminCommands(DEFAULT_LANGUAGE_CODE),
-      ...(isMultipleLocales ? [getLanguageCommand(DEFAULT_LANGUAGE_CODE)] : []),
+      ...getPrivateAndLanguageCommands(DEFAULT_LANGUAGE_CODE),
     ],
     {
       scope: {
