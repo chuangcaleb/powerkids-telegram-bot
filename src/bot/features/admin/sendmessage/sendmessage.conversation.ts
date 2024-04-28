@@ -2,7 +2,7 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
-import { retrieveQueryResult } from "./fuzzy.js";
+import { retrieveQueryResult } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
