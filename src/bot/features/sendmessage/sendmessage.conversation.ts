@@ -1,6 +1,6 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
-import { waitFor } from "~/bot/helpers/wait-for.js";
+import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
 import { retrieveQueryResult } from "./fuzzy.js";
 
@@ -12,25 +12,22 @@ export function sendmessageConversation() {
       await conversation.run(i18n);
 
       // Get message
-      await ctx.reply("Please tell me the message you want to send");
-      const messageCtx = await waitFor(
-        conversation,
-        "message:text",
-        "Please send text"
-      );
+      await ctx.reply("Enter the message you want to send");
+      const messageCtx = await waitFor(conversation, "msg:text");
+      if (!messageCtx) return;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const message = messageCtx.message?.text ?? "";
 
       // Get targets
       // TODO: allow comma/newline-delimited bulk input
       const students: [string, number][] = [];
-      await ctx.reply("Please type the name of a student, or send /done");
+      await ctx.reply(
+        "Forwarding this message.\nEnter the name of a student, or send /done"
+        // {reply_parameters:}
+      );
       while (true) {
-        const nameCtx = await waitFor(
-          conversation,
-          "message:text",
-          "Please send text"
-        );
+        const nameCtx = await waitFor(conversation, "msg:text");
+        if (!nameCtx) return;
         const name = nameCtx.message?.text ?? "";
         if (name === "/done") break;
         const queryResults = retrieveQueryResult(name);

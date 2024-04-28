@@ -1,12 +1,12 @@
-start_command = 
+start_command =
     .description = Start the bot
-language_command = 
+language_command =
     .description = Change language
 setcommands_command =
     .description = Set bot commands
 
-welcome = Welcome!
-language = 
+welcome = Welcome! Enter /help for options.
+language =
     .select = Please, select your language
     .changed = Language successfully changed!
 admin =
