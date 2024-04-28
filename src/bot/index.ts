@@ -18,6 +18,7 @@ import { i18n, isMultipleLocales } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";
 import { logger } from "~/logger.js";
+import { helpFeature } from "./features/help.js";
 import { errorHandler } from "./helpers/error-handler.js";
 
 type Options = {
@@ -54,6 +55,7 @@ export function createBot(token: string, options: Options = {}) {
 
   // Handlers
   protectedBot.use(welcomeFeature);
+  protectedBot.use(helpFeature);
   protectedBot.use(adminFeatures);
 
   if (isMultipleLocales) {

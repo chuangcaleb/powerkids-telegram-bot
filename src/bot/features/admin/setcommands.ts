@@ -13,7 +13,7 @@ function getLanguageCommand(localeCode: string): BotCommand {
   };
 }
 
-function getPrivateChatCommands(localeCode: string): BotCommand[] {
+export function getPrivateChatCommands(localeCode: string): BotCommand[] {
   return [
     {
       command: "start",
@@ -26,7 +26,7 @@ function getPrivateChatCommands(localeCode: string): BotCommand[] {
   ];
 }
 
-function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
+export function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
   return [
     {
       command: "setcommands",
