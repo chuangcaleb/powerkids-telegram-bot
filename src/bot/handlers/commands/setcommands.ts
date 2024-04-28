@@ -19,6 +19,10 @@ function getPrivateChatCommands(localeCode: string): BotCommand[] {
       command: "start",
       description: i18n.t(localeCode, "start_command.description"),
     },
+    {
+      command: "help",
+      description: "List available commands",
+    },
   ];
 }
 
