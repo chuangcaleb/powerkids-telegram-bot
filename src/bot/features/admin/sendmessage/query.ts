@@ -9,9 +9,9 @@ export function getQueryResults(
   query: string,
   ignoreList: FuseResult<Student>[] = []
 ) {
-  const ignoreIndexes = new Set(ignoreList.map((r) => r.refIndex));
+  const ignoredNames = new Set(ignoreList.map((r) => r.item[0]));
   const filteredRegistry = REGISTRY_ARRAY.filter(
-    (_, index) => !ignoreIndexes.has(index)
+    (value) => !ignoredNames.has(value[0])
   );
 
   // instantiate fuse
