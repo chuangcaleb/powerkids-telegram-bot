@@ -9,18 +9,16 @@ import {
   createContextConstructor,
 } from "~/bot/context.js";
 import {
-  adminFeature,
+  adminFeatures,
   languageFeature,
   unhandledFeature,
   welcomeFeature,
 } from "~/bot/features/index.js";
-import { errorHandler } from "~/bot/handlers/index.js";
 import { i18n, isMultipleLocales } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";
 import { logger } from "~/logger.js";
-import { sendmessageConversation } from "./features/sendmessage/sendmessage.conversation.js";
-import { sendmessageFeature } from "./features/sendmessage/sendmessage.js";
+import { errorHandler } from "./helpers/error-handler.js";
 
 type Options = {
   sessionStorage?: StorageAdapter<SessionData>;
@@ -53,12 +51,10 @@ export function createBot(token: string, options: Options = {}) {
   );
   protectedBot.use(i18n);
   protectedBot.use(conversations());
-  protectedBot.use(sendmessageConversation());
 
   // Handlers
   protectedBot.use(welcomeFeature);
-  protectedBot.use(sendmessageFeature);
-  protectedBot.use(adminFeature);
+  protectedBot.use(adminFeatures);
 
   if (isMultipleLocales) {
     protectedBot.use(languageFeature);

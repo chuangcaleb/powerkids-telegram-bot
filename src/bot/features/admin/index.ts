@@ -1,13 +1,19 @@
 import { chatAction } from "@grammyjs/auto-chat-action";
 import { Composer } from "grammy";
 import type { Context } from "~/bot/context.js";
-import { setCommandsHandler } from "~/bot/handlers/index.js";
 import { isAdmin } from "~/bot/helpers/filters/index.js";
 import { logHandle } from "~/bot/helpers/logging.js";
+import {
+  SENDMESSAGE_CONVERSATION,
+  sendmessageConversation,
+} from "./sendmessage/sendmessage.conversation.js";
+import { setCommandsHandler } from "./setcommands.js";
 
 const composer = new Composer<Context>();
 
 const feature = composer.chatType("private").filter(isAdmin);
+
+feature.use(sendmessageConversation());
 
 feature.command(
   "setcommands",
@@ -16,4 +22,13 @@ feature.command(
   setCommandsHandler
 );
 
-export { composer as adminFeature };
+feature.command(
+  "sendmessage",
+  logHandle("command-sendmessage"),
+  chatAction("typing"),
+  (ctx) => {
+    return ctx.conversation.enter(SENDMESSAGE_CONVERSATION);
+  }
+);
+
+export { composer as adminFeatures };
