@@ -21,10 +21,13 @@ export function sendmessageConversation() {
       // Get targets
       // TODO: allow comma/newline-delimited bulk input
       const students: [string, number][] = [];
-      await ctx.reply(
-        "Forwarding this message.\nEnter the name of a student, or send /done"
-        // {reply_parameters:}
+      await messageCtx.reply("↑ Forwarding this message ↑", {
+        reply_parameters: { message_id: messageCtx.msg.message_id },
+      });
+      await messageCtx.reply(
+        "Next, enter the name of a student, or send /done"
       );
+
       while (true) {
         const nameCtx = await waitFor(conversation, "msg:text");
         if (!nameCtx) return;
