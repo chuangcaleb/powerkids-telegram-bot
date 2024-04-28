@@ -32,12 +32,20 @@ export function sendmessageConversation() {
         const nameCtx = await waitFor(conversation, "msg:text");
         if (!nameCtx) return;
         const name = nameCtx.message?.text ?? "";
-        if (name === "/done") break;
+        if (name === "/done") {
+          if (students.length > 0) break;
+          await nameCtx.reply(
+            "Enter at least 1 student's name before sending /done"
+          );
+          continue;
+        }
         const queryResults = retrieveQueryResult(name);
 
         // if no results
         if (queryResults.length === 0) {
-          ctx.reply("No match found. Try full name.");
+          nameCtx.reply(
+            "No match found. Try entering more letters of the full name. If record does not exist, please contact the developer."
+          );
           continue;
         }
 
@@ -45,7 +53,7 @@ export function sendmessageConversation() {
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
           const names = queryResults.map((r) => r.item[0] + r.score).join(", ");
-          await ctx.reply(`many results (${names}), please retry`);
+          await nameCtx.reply(`many results (${names}), please retry`);
           continue;
         }
 
@@ -56,11 +64,11 @@ export function sendmessageConversation() {
           `(${students.length + 1}) ${oldStudentsString} + <b>${result[0]}</b>`,
           `Enter another name, or send /done`,
         ].join("\n");
-        await ctx.reply(reply, { parse_mode: "HTML" });
+        await nameCtx.reply(reply, { parse_mode: "HTML" });
         students.push(result);
       }
 
-      // await ctx.reply(`Sending to ${students.join(",")}: `);
+      // await nameCtx.reply(`Sending to ${students.join(",")}: `);
       await ctx.reply(
         `Sending to ${students.map((s) => s[1]).join(",")}: ${message}`
       );
