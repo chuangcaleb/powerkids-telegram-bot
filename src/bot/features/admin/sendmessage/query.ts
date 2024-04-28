@@ -7,11 +7,10 @@ const LIMIT = 3;
 const fuse = new Fuse(REGISTRY_ARRAY, {
   threshold: THRESHOLD,
   keys: [{ name: "name", getFn: (pair) => pair[0] }],
-  includeScore: true,
   ignoreLocation: true,
 });
 
-export function retrieveQueryResult(query: string) {
+function getQueryResult(query: string) {
   const results = fuse.search(query, { limit: LIMIT });
 
   // if one or no results, return
@@ -27,3 +26,9 @@ export function retrieveQueryResult(query: string) {
   // else, return all results
   return results;
 }
+
+function getQueryResultWrapper(query: string) {
+  return getQueryResult(query).map((result) => result.item);
+}
+
+export { getQueryResultWrapper as getQueryResults };

@@ -2,7 +2,7 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
-import { retrieveQueryResult } from "./query.js";
+import { getQueryResults } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -37,7 +37,7 @@ export function sendmessageConversation() {
           );
           continue;
         }
-        const queryResults = retrieveQueryResult(name);
+        const queryResults = getQueryResults(name);
 
         // if no results
         if (queryResults.length === 0) {
@@ -50,13 +50,13 @@ export function sendmessageConversation() {
         // if more than 1
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
-          const names = queryResults.map((r) => r.item[0] + r.score).join(", ");
+          const names = queryResults.map((r) => r[0]).join(", ");
           await nameCtx.reply(`many results (${names}), please retry`);
           continue;
         }
 
         // if exactly 1
-        const result = queryResults[0].item;
+        const result = queryResults[0];
         const oldStudentsString = students.map((s) => s[0]).join(", ");
         const reply = [
           `(${students.length + 1}) ${oldStudentsString} + <b>${result[0]}</b>`,
