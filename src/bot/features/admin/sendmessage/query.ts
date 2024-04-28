@@ -1,16 +1,24 @@
-import Fuse from "fuse.js";
-import { REGISTRY_ARRAY } from "./mock-data.js";
+import Fuse, { FuseResult } from "fuse.js";
+import { REGISTRY_ARRAY, Student } from "./mock-data.js";
 
 const THRESHOLD = 0.3;
 const LIMIT = 3;
 
-const fuse = new Fuse(REGISTRY_ARRAY, {
-  threshold: THRESHOLD,
-  keys: [{ name: "name", getFn: (pair) => pair[0] }],
-  ignoreLocation: true,
-});
+function getQueryResults(
+  query: string,
+  ignoreList: FuseResult<Student>[] = []
+) {
+  const ignoreIndexes = new Set(ignoreList.map((r) => r.refIndex));
+  const filteredRegistry = REGISTRY_ARRAY.filter(
+    (_, index) => !ignoreIndexes.has(index)
+  );
 
-function getQueryResults(query: string) {
+  const fuse = new Fuse(filteredRegistry, {
+    threshold: THRESHOLD,
+    keys: [{ name: "name", getFn: (pair) => pair[0] }],
+    ignoreLocation: true,
+  });
+
   const results = fuse.search(query, { limit: LIMIT });
 
   // if one or no results, return

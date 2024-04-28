@@ -43,7 +43,7 @@ export function sendmessageConversation() {
         }
 
         // Query for students
-        const queryResults = getQueryResults(name);
+        const queryResults = getQueryResults(name, studentSearchResults);
 
         // if no results, prompt retry
         if (queryResults.length === 0) {
