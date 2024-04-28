@@ -1,7 +1,9 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
+import { FuseResult } from "fuse.js";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
+import { Student } from "./mock-data.js";
 import { getQueryResults } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
@@ -19,7 +21,7 @@ export function sendmessageConversation() {
 
       // Get targets
       // TODO: allow comma/newline-delimited bulk input
-      const students: [string, number][] = [];
+      const studentSearchResults: FuseResult<Student>[] = [];
       await messageCtx.reply("↑ Forwarding this message ↑", {
         reply_parameters: { message_id: messageCtx.msg.message_id },
       });
@@ -30,16 +32,20 @@ export function sendmessageConversation() {
       while (true) {
         const nameCtx = await waitFor(conversation, "msg:text");
         const name = nameCtx.message?.text ?? "";
+
+        // If /done, try breaking loop
         if (name === "/done") {
-          if (students.length > 0) break;
+          if (studentSearchResults.length > 0) break;
           await nameCtx.reply(
             "Enter at least 1 student's name before sending /done"
           );
           continue;
         }
+
+        // Query for students
         const queryResults = getQueryResults(name);
 
-        // if no results
+        // if no results, prompt retry
         if (queryResults.length === 0) {
           nameCtx.reply(
             "No close match found. If record does not exist, please contact the developer."
@@ -47,27 +53,31 @@ export function sendmessageConversation() {
           continue;
         }
 
-        // if more than 1
+        // if more than 1, prompt retry
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
-          const names = queryResults.map((r) => r[0]).join(", ");
+          const names = queryResults.map((r) => r.item[0]).join(", ");
           await nameCtx.reply(
             `More than one result found, please narrow your search\n<i>Possibly: ${names}</i>`
           );
           continue;
         }
 
-        // if exactly 1
+        // if exactly 1, add to list
         const result = queryResults[0];
-        const oldStudentsString = students.map((s) => s[0]).join(", ");
-        const studentsList = `(x${students.length + 1}) ${oldStudentsString}${students.length > 0 ? ", " : ""}<b>${result[0]}</b>`;
+        const oldStudentsString = studentSearchResults
+          .map((s) => s.item[0])
+          .join(", ");
+        const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result.item[0]}</b>`;
         const reply = `${studentsList}\nEnter another name, or send /done`;
         await nameCtx.reply(reply);
-        students.push(result);
+        studentSearchResults.push(result);
       }
 
-      // await nameCtx.reply(`Sending to ${students.join(",")}: `);
-      await ctx.reply(`Sending to ${students.map((s) => s[1]).join(",")}`);
+      // send
+      await ctx.reply(
+        `Sending to ${studentSearchResults.map((s) => s.item[1]).join(",")}`
+      );
       await ctx.reply(`The message is:\n\n${message}`);
     },
     SENDMESSAGE_CONVERSATION

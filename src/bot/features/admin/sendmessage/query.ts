@@ -10,7 +10,7 @@ const fuse = new Fuse(REGISTRY_ARRAY, {
   ignoreLocation: true,
 });
 
-function getQueryResult(query: string) {
+function getQueryResults(query: string) {
   const results = fuse.search(query, { limit: LIMIT });
 
   // if one or no results, return
@@ -27,8 +27,4 @@ function getQueryResult(query: string) {
   return results;
 }
 
-function getQueryResultWrapper(query: string) {
-  return getQueryResult(query).map((result) => result.item);
-}
-
-export { getQueryResultWrapper as getQueryResults };
+export { getQueryResults };
