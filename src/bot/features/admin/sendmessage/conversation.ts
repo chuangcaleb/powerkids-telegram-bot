@@ -47,7 +47,7 @@ export function sendmessageConversation() {
         // if no results, prompt retry
         if (queryResults.length === 0) {
           nameCtx.reply(
-            "No close match found. If record does not exist, please contact the developer."
+            "No new close match found. If record does not exist, please contact the developer."
           );
           continue;
         }

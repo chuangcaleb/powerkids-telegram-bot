@@ -18,18 +18,5 @@ export async function waitFor<Q extends FilterQuery>(
   if (ctx.msg?.text === "/cancel") {
     throw new ExitConversationError();
   }
-  // if (matchFilter("::bot_command")(ctx)) {
-  //   // Terminate conversation
-  //   if (ctx.msg?.text === "/cancel") {
-  //     throw new ExitConversationError();
-  //   }
-
-  //   // Any other command
-  //   if (otherwiseReply) await ctx.reply(otherwiseReply);
-  //   await ctx.reply(
-  //     `Invalid command during this action.\nEnter /cancel to terminate and perform other actions instead!`
-  //   );
-  //   await conversation.skip({ drop: true });
-  // }
   return ctx;
 }
