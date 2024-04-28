@@ -6,7 +6,7 @@ import { logHandle } from "~/bot/helpers/logging.js";
 import {
   SENDMESSAGE_CONVERSATION,
   sendmessageConversation,
-} from "./sendmessage/sendmessage.conversation.js";
+} from "./sendmessage/conversation.js";
 import { setCommandsHandler } from "./setcommands.js";
 
 const composer = new Composer<Context>();
