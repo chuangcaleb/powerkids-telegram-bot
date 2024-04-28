@@ -26,6 +26,10 @@ function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
       command: "setcommands",
       description: i18n.t(localeCode, "setcommands_command.description"),
     },
+    {
+      command: "sendmessage",
+      description: "Broadcast a message to the parents of selected students",
+    },
   ];
 }
 

@@ -3,7 +3,7 @@ start_command =
 language_command =
     .description = Change language
 setcommands_command =
-    .description = Set bot commands
+    .description = Update bot commands
 
 welcome = Welcome! Enter /help for options.
 language =
