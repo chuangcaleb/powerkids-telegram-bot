@@ -1,15 +1,12 @@
-import Fuse, { FuseResult } from "fuse.js";
+import Fuse from "fuse.js";
 import { REGISTRY_ARRAY, Student } from "./mock-data.js";
 
 // config
 const THRESHOLD = 0.3;
 const LIMIT = 3;
 
-export function getQueryResults(
-  query: string,
-  ignoreList: FuseResult<Student>[] = []
-) {
-  const ignoredNames = new Set(ignoreList.map((r) => r.item[0]));
+function getQueryResults(query: string, ignoreList: Student[] = []) {
+  const ignoredNames = new Set(ignoreList.map((r) => r[0]));
   const filteredRegistry = REGISTRY_ARRAY.filter(
     (value) => !ignoredNames.has(value[0])
   );
@@ -37,3 +34,9 @@ export function getQueryResults(
   // else, return all results
   return results;
 }
+
+function getQueryResultsWrapper(query: string, ignoreList: Student[] = []) {
+  return getQueryResults(query, ignoreList).map((r) => r.item);
+}
+
+export { getQueryResultsWrapper as getQueryResults };

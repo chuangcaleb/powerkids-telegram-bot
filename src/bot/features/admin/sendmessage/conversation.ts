@@ -1,5 +1,4 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
-import { FuseResult } from "fuse.js";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
@@ -21,7 +20,7 @@ export function sendmessageConversation() {
 
       // Get targets
       // TODO: allow comma/newline-delimited bulk input
-      const studentSearchResults: FuseResult<Student>[] = [];
+      const studentSearchResults: Student[] = [];
       await messageCtx.reply("↑ Forwarding this message ↑", {
         reply_parameters: { message_id: messageCtx.msg.message_id },
       });
@@ -56,7 +55,7 @@ export function sendmessageConversation() {
         // if more than 1, prompt retry
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
-          const names = queryResults.map((r) => r.item[0]).join(", ");
+          const names = queryResults.map((r) => r[0]).join(", ");
           await nameCtx.reply(
             `More than one result found, please narrow your search\n<i>Possibly: ${names}</i>`
           );
@@ -66,9 +65,9 @@ export function sendmessageConversation() {
         // if exactly 1, add to list
         const result = queryResults[0];
         const oldStudentsString = studentSearchResults
-          .map((s) => s.item[0])
+          .map((s) => s[0])
           .join(", ");
-        const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result.item[0]}</b>`;
+        const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result[0]}</b>`;
         const reply = `${studentsList}\nEnter another name, or send /done`;
         await nameCtx.reply(reply);
         studentSearchResults.push(result);
@@ -76,7 +75,7 @@ export function sendmessageConversation() {
 
       // send
       await ctx.reply(
-        `Sending to ${studentSearchResults.map((s) => s.item[1]).join(",")}`
+        `Sending to ${studentSearchResults.map((s) => s[1]).join(",")}`
       );
       await ctx.reply(`The message is:\n\n${message}`);
     },
