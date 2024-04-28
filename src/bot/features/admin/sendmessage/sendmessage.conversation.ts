@@ -42,7 +42,7 @@ export function sendmessageConversation() {
         // if no results
         if (queryResults.length === 0) {
           nameCtx.reply(
-            "No match found. Try entering more letters of the full name. If record does not exist, please contact the developer."
+            "No close match found. If record does not exist, please contact the developer."
           );
           continue;
         }
@@ -51,18 +51,18 @@ export function sendmessageConversation() {
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
           const names = queryResults.map((r) => r[0]).join(", ");
-          await nameCtx.reply(`many results (${names}), please retry`);
+          await nameCtx.reply(
+            `More than one result found, please narrow your search\n<i>Possibly: ${names}</i>`
+          );
           continue;
         }
 
         // if exactly 1
         const result = queryResults[0];
         const oldStudentsString = students.map((s) => s[0]).join(", ");
-        const reply = [
-          `(${students.length + 1}) ${oldStudentsString} + <b>${result[0]}</b>`,
-          `Enter another name, or send /done`,
-        ].join("\n");
-        await nameCtx.reply(reply, { parse_mode: "HTML" });
+        const studentsList = `(x${students.length + 1}) ${oldStudentsString}${students.length > 0 ? ", " : ""}<b>${result[0]}</b>`;
+        const reply = `${studentsList}\nEnter another name, or send /done`;
+        await nameCtx.reply(reply);
         students.push(result);
       }
 
