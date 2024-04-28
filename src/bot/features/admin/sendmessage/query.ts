@@ -19,7 +19,7 @@ function getQueryResult(query: string) {
   // If many results...
   // test each for case-ignored substring occurrence
   const occurrence = results.filter((result) =>
-    result.item[0].toLowerCase().includes(query)
+    result.item[0].toLowerCase().includes(query.toLowerCase())
   );
   // if only one, return that one
   if (occurrence.length === 1) return occurrence;
