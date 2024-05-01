@@ -2,8 +2,8 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
-import { directus } from "~/lib/directus/index.js";
 import { Student } from "~/lib/directus/schema.js";
+import { getFilteredRegistry } from "./get-filtered-registry.js";
 import { getQueryResults } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
@@ -16,7 +16,6 @@ export function sendmessageConversation() {
       // Get message
       await ctx.reply("Enter the message you want to send");
       const messageCtx = await waitFor(conversation, "msg:text");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const message = messageCtx.message?.text ?? "";
 
       // Get targets
@@ -42,14 +41,9 @@ export function sendmessageConversation() {
           continue;
         }
 
-        const registry = await directus.getRegistry();
-
         // Query for students
-        const queryResults = getQueryResults(
-          registry,
-          name,
-          studentSearchResults
-        );
+        const collection = await getFilteredRegistry(studentSearchResults);
+        const queryResults = getQueryResults(collection, name);
 
         // if no results, prompt retry
         if (queryResults.length === 0) {

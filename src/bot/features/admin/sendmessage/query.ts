@@ -5,18 +5,9 @@ import { Student } from "~/lib/directus/schema.js";
 const THRESHOLD = 0.3;
 const LIMIT = 3;
 
-function getQueryResults(
-  collection: Student[],
-  query: string,
-  ignoreList: Student[] = []
-) {
-  const ignoreStudents = new Set(ignoreList.map((r) => r.name));
-  const filteredCollection = collection.filter(
-    (student) => !ignoreStudents.has(student.name)
-  );
-
+function getQueryResults(collection: Student[], query: string) {
   // instantiate fuse
-  const fuse = new Fuse(filteredCollection, {
+  const fuse = new Fuse(collection, {
     threshold: THRESHOLD,
     keys: [{ name: "name", getFn: (pair) => pair.name }],
     ignoreLocation: true,
@@ -39,12 +30,8 @@ function getQueryResults(
   return results;
 }
 
-function getQueryResultsWrapper(
-  collection: Student[],
-  query: string,
-  ignoreList: Student[] = []
-) {
-  return getQueryResults(collection, query, ignoreList).map((r) => r.item);
+function getQueryResultsWrapper(collection: Student[], query: string) {
+  return getQueryResults(collection, query).map((r) => r.item);
 }
 
 export { getQueryResultsWrapper as getQueryResults };
