@@ -15,7 +15,7 @@ function composeCommandList(commands: BotCommand[]) {
     .join("\n");
 }
 
-composer.command("help", logHandle("command-start"), async (ctx) => {
+composer.command("help", logHandle("command-help"), async (ctx) => {
   const locale = await ctx.i18n.getLocale();
   const privateCommands = getPrivateChatCommands(locale);
   const adminCommands = getPrivateChatAdminCommands(locale);
