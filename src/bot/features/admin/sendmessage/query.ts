@@ -1,20 +1,25 @@
 import Fuse from "fuse.js";
-import { REGISTRY_ARRAY, Student } from "./mock-data.js";
+import { Student } from "~/lib/directus/schema.js";
 
 // config
 const THRESHOLD = 0.3;
 const LIMIT = 3;
 
-function getQueryResults(query: string, ignoreList: Student[] = []) {
-  const ignoredNames = new Set(ignoreList.map((r) => r[0]));
-  const filteredRegistry = REGISTRY_ARRAY.filter(
-    (value) => !ignoredNames.has(value[0])
-  );
+function getQueryResults(
+  collection: Student[],
+  query: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ignoreList: Student[] = []
+) {
+  // const ignoredNames = new Set(ignoreList.map((r) => r.name));
+  // const filteredRegistry = collection.filter(
+  //   (value) => !ignoredNames.has(value[0])
+  // );
 
   // instantiate fuse
-  const fuse = new Fuse(filteredRegistry, {
+  const fuse = new Fuse(collection, {
     threshold: THRESHOLD,
-    keys: [{ name: "name", getFn: (pair) => pair[0] }],
+    keys: [{ name: "name", getFn: (pair) => pair.name }],
     ignoreLocation: true,
   });
 
@@ -27,7 +32,7 @@ function getQueryResults(query: string, ignoreList: Student[] = []) {
   // If many results...
   // test each for case-ignored substring occurrence
   const occurrence = results.filter((result) =>
-    result.item[0].toLowerCase().includes(query.toLowerCase())
+    result.item.name.toLowerCase().includes(query.toLowerCase())
   );
   // if only one, return that one
   if (occurrence.length === 1) return occurrence;
@@ -35,8 +40,12 @@ function getQueryResults(query: string, ignoreList: Student[] = []) {
   return results;
 }
 
-function getQueryResultsWrapper(query: string, ignoreList: Student[] = []) {
-  return getQueryResults(query, ignoreList).map((r) => r.item);
+function getQueryResultsWrapper(
+  collection: Student[],
+  query: string,
+  ignoreList: Student[] = []
+) {
+  return getQueryResults(collection, query, ignoreList).map((r) => r.item);
 }
 
 export { getQueryResultsWrapper as getQueryResults };

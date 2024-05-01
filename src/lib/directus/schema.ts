@@ -5,6 +5,6 @@ export interface Student {
 }
 
 export interface Schema {
-  students: Student[];
+  student: Student[];
   directus_users: { telegram_ids: string[] };
 }

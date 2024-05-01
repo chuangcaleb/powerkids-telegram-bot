@@ -2,7 +2,8 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
-import { Student } from "./mock-data.js";
+import { directus } from "~/lib/directus/index.js";
+import { Student } from "~/lib/directus/schema.js";
 import { getQueryResults } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
@@ -41,8 +42,14 @@ export function sendmessageConversation() {
           continue;
         }
 
+        const registry = await directus.getRegistry();
+
         // Query for students
-        const queryResults = getQueryResults(name, studentSearchResults);
+        const queryResults = getQueryResults(
+          registry,
+          name,
+          studentSearchResults
+        );
 
         // if no results, prompt retry
         if (queryResults.length === 0) {
@@ -55,7 +62,7 @@ export function sendmessageConversation() {
         // if more than 1, prompt retry
         // TODO: handle multiple with further narrowing
         if (queryResults.length > 1) {
-          const names = queryResults.map((r) => r[0]).join(", ");
+          const names = queryResults.map((r) => r.name).join(", ");
           await nameCtx.reply(
             `More than one result found, please narrow your search\n<i>Possibly: ${names}</i>`
           );
@@ -65,9 +72,9 @@ export function sendmessageConversation() {
         // if exactly 1, add to list
         const result = queryResults[0];
         const oldStudentsString = studentSearchResults
-          .map((s) => s[0])
+          .map((s) => s.name)
           .join(", ");
-        const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result[0]}</b>`;
+        const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result.name}</b>`;
         const reply = `${studentsList}\nEnter another name, or send /done`;
         await nameCtx.reply(reply);
         studentSearchResults.push(result);
@@ -75,7 +82,7 @@ export function sendmessageConversation() {
 
       // send
       await ctx.reply(
-        `Sending to ${studentSearchResults.map((s) => s[1]).join(",")}`
+        `Sending to ${studentSearchResults.map((s) => s.telegram_ids).join(",")}`
       );
       await ctx.reply(`The message is:\n\n${message}`);
     },
