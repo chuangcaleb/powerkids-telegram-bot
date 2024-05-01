@@ -11,4 +11,4 @@ language =
     .changed = Language successfully changed!
 admin =
     .commands-updated = Commands updated.
-unhandled = Unrecognized command. Try /start
+unhandled = Unrecognized command for this current state. Try /start
