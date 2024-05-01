@@ -24,6 +24,8 @@ const createConfigFromEnvironment = (environment: NodeJS.ProcessEnv) => {
       .array(z.enum(API_CONSTANTS.ALL_UPDATE_TYPES))
       .default([]),
     BOT_ADMINS: z.array(z.number()).default([]),
+    DIRECTUS_STATIC_TOKEN: z.string(),
+    DIRECTUS_URL: z.string(),
   });
 
   if (config.BOT_MODE === "webhook") {
