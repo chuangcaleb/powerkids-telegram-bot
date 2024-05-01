@@ -8,7 +8,7 @@ import {
   SessionData,
   createContextConstructor,
 } from "~/bot/context.js";
-import { features, unhandledFeature } from "~/bot/features/index.js";
+import { features, unhandledFeature } from "~/bot/features/composer.js";
 import { i18n } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";

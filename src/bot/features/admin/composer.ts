@@ -11,7 +11,7 @@ import { setCommandsHandler } from "./setcommands.js";
 
 const composer = new Composer<Context>();
 
-const feature = composer.chatType("private").filter(isAdmin);
+const feature = composer.filter(isAdmin);
 
 feature.command(
   "setcommands",
