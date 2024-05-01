@@ -5,6 +5,7 @@ import { i18n } from "~/bot/i18n.js";
 import { Student } from "~/lib/directus/schema.js";
 import { getFilteredRegistry } from "./get-filtered-registry.js";
 import { getQueryResults } from "./query.js";
+import { pickSubstring } from "./pick-substring.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -42,8 +43,13 @@ export function sendmessageConversation() {
         }
 
         // Query for students
-        const collection = await getFilteredRegistry(studentSearchResults);
-        const queryResults = getQueryResults(collection, name);
+        const registry = await getFilteredRegistry(studentSearchResults);
+        // eslint-disable-next-line unicorn/no-array-reduce
+        const queryResults = [getQueryResults, pickSubstring].reduce(
+          (previous, current) =>
+            current<Student>(previous, name, (result) => result.name),
+          registry
+        );
 
         // if no results, prompt retry
         if (queryResults.length === 0) {
