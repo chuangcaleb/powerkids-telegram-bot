@@ -4,13 +4,11 @@ import { logHandle } from "~/bot/helpers/logging.js";
 
 const composer = new Composer<Context>();
 
-const feature = composer.chatType("private");
-
-feature.on("message", logHandle("unhandled-message"), (ctx) => {
+composer.on("message", logHandle("unhandled-message"), (ctx) => {
   return ctx.reply(ctx.t("unhandled"));
 });
 
-feature.on("callback_query", logHandle("unhandled-callback-query"), (ctx) => {
+composer.on("callback_query", logHandle("unhandled-callback-query"), (ctx) => {
   return ctx.answerCallbackQuery();
 });
 

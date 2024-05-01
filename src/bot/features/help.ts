@@ -9,15 +9,13 @@ import {
 
 const composer = new Composer<Context>();
 
-const feature = composer.chatType("private");
-
 function composeCommandList(commands: BotCommand[]) {
   return commands
     .map(({ command, description }) => `/${command} – ${description}`)
     .join("\n");
 }
 
-feature.command("help", logHandle("command-start"), async (ctx) => {
+composer.command("help", logHandle("command-start"), async (ctx) => {
   const locale = await ctx.i18n.getLocale();
   const privateCommands = getPrivateChatCommands(locale);
   const adminCommands = getPrivateChatAdminCommands(locale);
