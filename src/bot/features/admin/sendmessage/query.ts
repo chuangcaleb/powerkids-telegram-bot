@@ -8,16 +8,15 @@ const LIMIT = 3;
 function getQueryResults(
   collection: Student[],
   query: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ignoreList: Student[] = []
 ) {
-  // const ignoredNames = new Set(ignoreList.map((r) => r.name));
-  // const filteredRegistry = collection.filter(
-  //   (value) => !ignoredNames.has(value[0])
-  // );
+  const ignoreStudents = new Set(ignoreList.map((r) => r.name));
+  const filteredCollection = collection.filter(
+    (student) => !ignoreStudents.has(student.name)
+  );
 
   // instantiate fuse
-  const fuse = new Fuse(collection, {
+  const fuse = new Fuse(filteredCollection, {
     threshold: THRESHOLD,
     keys: [{ name: "name", getFn: (pair) => pair.name }],
     ignoreLocation: true,

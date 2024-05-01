@@ -15,7 +15,10 @@ const client = createDirectus<Schema>(config.DIRECTUS_URL)
 const directus = {
   getRegistry() {
     return client.request(
-      readItems("student", { fields: ["ic", "name", "telegram_ids"] })
+      readItems("student", {
+        fields: ["ic", "name", "telegram_ids"],
+        limit: 999,
+      })
     );
   },
   getUsers() {
@@ -26,10 +29,3 @@ const directus = {
 };
 
 export { directus };
-
-// const response = await directus.request(readMe());
-// const response = await directus.request(
-//   readUsers({ fields: ["id", "first_name", "telegram_ids"] })
-// );
-
-// console.log("🚀 ~ response:", response);
