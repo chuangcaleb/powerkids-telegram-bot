@@ -4,12 +4,12 @@ import { isMultipleLocales } from "../i18n.js";
 import { adminFeatures } from "./admin/index.js";
 import { helpFeature } from "./help.js";
 import { languageFeature } from "./language.js";
-import { welcomeFeature } from "./welcome.js";
+import { welcomeFeature } from "./start.js";
 
 export * from "./admin/index.js";
 export * from "./language.js";
 export * from "./unhandled.js";
-export * from "./welcome.js";
+export * from "./start.js";
 
 const composer = new Composer<Context>();
 
