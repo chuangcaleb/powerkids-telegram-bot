@@ -1,10 +1,10 @@
 import { ExitConversationError } from "~/bot/helpers/conversation/exit-convo-error.js";
-import { directus } from "~/lib/directus/index.js";
+import { directus } from "~/lib/directus/client.js";
 import { Student } from "~/lib/directus/types-gen.js";
 
-export async function getFilteredRegistry(ignoreList: Student[]) {
+export function getFilteredRegistry(ignoreList: Student[]) {
   try {
-    const registry = await directus.getRegistry();
+    const registry = directus.students;
     if (registry.length === 0)
       throw new ExitConversationError(
         "Students registry is empty. Please contact developer."

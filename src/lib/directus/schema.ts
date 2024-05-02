@@ -6,5 +6,5 @@ interface SchemaStudent {
 
 export interface Schema {
   student: SchemaStudent[];
-  directus_users: { telegram_ids: string[] };
+  directus_users: { telegram_ids: number[] };
 }

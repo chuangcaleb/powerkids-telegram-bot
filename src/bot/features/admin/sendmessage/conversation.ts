@@ -39,7 +39,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     }
 
     // Query for students
-    const registry = await getFilteredRegistry(studentSearchResults);
+    const registry = getFilteredRegistry(studentSearchResults);
     // eslint-disable-next-line unicorn/no-array-reduce
     const queryResults = [getQueryResults, pickSubstring].reduce(
       (previous, current) =>
