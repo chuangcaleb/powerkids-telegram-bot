@@ -16,7 +16,7 @@ composer.command("auth", logHandle("command-start"), (ctx) => {
 composer
   .use(authenticateConversation())
   .command(
-    "sendmessage",
+    "authenticate",
     logHandle("command-authenticate"),
     chatAction("typing"),
     (ctx) => ctx.conversation.enter(AUTHENTICATE_CONVERSATION)

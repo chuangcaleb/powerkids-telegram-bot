@@ -4,14 +4,13 @@ import { i18n } from "~/bot/i18n.js";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
 
-export function authenticateConversation() {
-  return createConversation(
-    async (conversation: Conversation<Context>, ctx: Context) => {
-      await conversation.run(i18n);
+async function builder(conversation: Conversation<Context>, ctx: Context) {
+  await conversation.run(i18n);
 
-      // Get message
-      await ctx.reply("Enter your NRIC number");
-    },
-    AUTHENTICATE_CONVERSATION
-  );
+  // Get message
+  await ctx.reply("Enter ");
+}
+
+export function authenticateConversation() {
+  return createConversation(builder, AUTHENTICATE_CONVERSATION);
 }
