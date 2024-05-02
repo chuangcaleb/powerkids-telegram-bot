@@ -27,7 +27,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   while (true) {
     const nameCtx = await waitFor(conversation, "message:text");
-    const name = nameCtx.message.text;
+    const name = nameCtx.msg.text;
 
     // If /done, try breaking loop
     if (name === "/done") {
