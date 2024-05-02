@@ -1,10 +1,10 @@
-export interface Student {
+interface SchemaStudent {
   name: string;
   ic: string;
   telegram_ids: string[];
 }
 
 export interface Schema {
-  student: Student[];
+  student: SchemaStudent[];
   directus_users: { telegram_ids: string[] };
 }

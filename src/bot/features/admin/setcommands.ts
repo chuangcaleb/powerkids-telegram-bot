@@ -23,10 +23,6 @@ export function getPrivateChatCommands(localeCode: string): BotCommand[] {
       command: "help",
       description: "List available commands",
     },
-    {
-      command: "authenticate",
-      description: "Register your Telegram account to a student",
-    },
   ];
 }
 

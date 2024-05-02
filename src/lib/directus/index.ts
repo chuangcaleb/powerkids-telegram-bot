@@ -21,7 +21,7 @@ const directus = {
       })
     );
   },
-  getUsers() {
+  getAdmins() {
     return client.request(
       readUsers({ fields: ["id", "first_name", "telegram_ids"] })
     );

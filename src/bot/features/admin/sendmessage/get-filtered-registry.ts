@@ -1,6 +1,6 @@
 import { ExitConversationError } from "~/bot/helpers/conversation/exit-convo-error.js";
 import { directus } from "~/lib/directus/index.js";
-import { Student } from "~/lib/directus/schema.js";
+import { Student } from "~/lib/directus/types-gen.js";
 
 export async function getFilteredRegistry(ignoreList: Student[]) {
   try {

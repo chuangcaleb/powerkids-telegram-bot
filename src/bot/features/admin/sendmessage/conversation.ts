@@ -2,7 +2,7 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
-import { Student } from "~/lib/directus/schema.js";
+import { Student } from "~/lib/directus/types-gen.js";
 import { getFilteredRegistry } from "./get-filtered-registry.js";
 import { pickSubstring } from "./pick-substring.js";
 import { getQueryResults } from "./query.js";
@@ -27,7 +27,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   while (true) {
     const nameCtx = await waitFor(conversation, "message:text");
-    const name = nameCtx.msg.text;
+    const name = nameCtx.message.text;
 
     // If /done, try breaking loop
     if (name === "/done") {
