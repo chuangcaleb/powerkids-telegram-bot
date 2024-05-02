@@ -1,7 +1,7 @@
 import { chatAction } from "@grammyjs/auto-chat-action";
 import { Composer } from "grammy";
-import { isAdmin } from "grammy-guard";
 import type { Context } from "~/bot/context.js";
+import { isAdmin } from "~/bot/helpers/filters/is-admin.js";
 import { logHandle } from "~/bot/helpers/logging.js";
 import {
   SENDMESSAGE_CONVERSATION,

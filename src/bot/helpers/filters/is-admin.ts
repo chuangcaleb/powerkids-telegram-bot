@@ -1,8 +1,9 @@
-import { isUserHasId } from "grammy-guard";
+import { Context } from "~/bot/context.js";
 import { directus } from "~/lib/directus/client.js";
 
-export function isAdmin() {
+export async function isAdmin(ctx: Context) {
   const { admins } = directus;
   const adminTelegramIds = admins.flatMap((admin) => admin.telegram_ids);
-  return isUserHasId(...adminTelegramIds);
+  if (!ctx?.msg?.from) return false;
+  return adminTelegramIds.includes(ctx.msg.from.id);
 }
