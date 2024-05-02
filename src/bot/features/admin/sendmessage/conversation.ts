@@ -4,8 +4,8 @@ import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
 import { Student } from "~/lib/directus/schema.js";
 import { getFilteredRegistry } from "./get-filtered-registry.js";
-import { getQueryResults } from "./query.js";
 import { pickSubstring } from "./pick-substring.js";
+import { getQueryResults } from "./query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -14,8 +14,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   // Get message
   await ctx.reply("Enter the message you want to send");
-  const messageCtx = await waitFor(conversation, "msg:text");
-  const message = messageCtx.message?.text ?? "";
+  const messageCtx = await waitFor(conversation, "message:text");
+  const message = messageCtx.msg.text;
 
   // Get targets
   // TODO: allow comma/newline-delimited bulk input
@@ -26,8 +26,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await messageCtx.reply("Next, enter the name of a student, or send /done");
 
   while (true) {
-    const nameCtx = await waitFor(conversation, "msg:text");
-    const name = nameCtx.message?.text ?? "";
+    const nameCtx = await waitFor(conversation, "message:text");
+    const name = nameCtx.message.text;
 
     // If /done, try breaking loop
     if (name === "/done") {
