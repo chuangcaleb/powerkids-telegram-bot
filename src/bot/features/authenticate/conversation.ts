@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
+import { catchGenericException } from "~/bot/helpers/conversation/throw-generic-exception.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { isAdmin } from "~/bot/helpers/filters/is-admin.js";
 import { i18n } from "~/bot/i18n.js";
@@ -11,6 +12,9 @@ export const AUTHENTICATE_CONVERSATION = "authenticate";
 
 async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
+
+  if (client.students.length === 0)
+    catchGenericException(ctx, "Attempted authentication w/ empty admins list");
 
   // Break if already an authenticated admin
   if (isAdmin(ctx)) {

@@ -1,3 +1,4 @@
+import { logger } from "~/logger.js";
 import { authenticateAdmin, getAdmins, getStudents } from "./methods/index.js";
 import { registerParent } from "./methods/register-parent.js";
 import { Admin, Student } from "./types-gen.js";
@@ -14,13 +15,19 @@ class ApiClient {
   }
 
   async update() {
-    this.students = await getStudents();
-    this.admins = await getAdmins();
+    try {
+      this.students = await getStudents();
+      this.admins = await getAdmins();
 
-    // We typecast as Number because Directus list (csv) type only stores as strings
-    this.adminTelegramIds = new Set(
-      this.admins.flatMap((admin) => Number(admin.telegram_ids)).filter(Boolean)
-    );
+      // We typecast as Number because Directus list (csv) type only stores as strings
+      this.adminTelegramIds = new Set(
+        this.admins
+          .flatMap((admin) => Number(admin.telegram_ids))
+          .filter(Boolean)
+      );
+    } catch (error) {
+      logger.error(error, "ApiClient.update()");
+    }
   }
 
   authenticateAdmin = authenticateAdmin;

@@ -1,8 +1,8 @@
 import { BotCommand } from "@grammyjs/types";
 import { CommandContext } from "grammy";
+import type { Context } from "~/bot/context.js";
 import { i18n, isMultipleLocales } from "~/bot/i18n.js";
 import { config } from "~/config.js";
-import type { Context } from "~/bot/context.js";
 
 const DEFAULT_LANGUAGE_CODE = "en";
 
@@ -65,9 +65,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
   // set private chat commands
   await ctx.api.setMyCommands(
     getPrivateAndLanguageCommands(DEFAULT_LANGUAGE_CODE),
-    {
-      scope: { type: "all_private_chats" },
-    }
+    { scope: { type: "all_private_chats" } }
   );
 
   if (isMultipleLocales) {
@@ -98,7 +96,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
   //   await Promise.all(requests);
   // }
 
-  // set private chat commands for owner
+  // set private chat commands for admins
   await ctx.api.setMyCommands(
     [
       ...getPrivateChatAdminCommands(DEFAULT_LANGUAGE_CODE),

@@ -12,3 +12,4 @@ language =
 admin =
     .commands-updated = Commands updated.
 unhandled = Unrecognized command for this current state. Try /start
+generic_error = There is an error in our system, please try again later or contact the school.
