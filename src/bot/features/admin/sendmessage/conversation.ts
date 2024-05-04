@@ -1,6 +1,6 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
-import { catchGenericException } from "~/bot/helpers/conversation/throw-generic-exception.js";
+import { throwException } from "~/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { i18n } from "~/bot/i18n.js";
 import { client } from "~/lib/directus/client.js";
@@ -17,7 +17,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   // catch empty students list
   const { students } = client;
   if (students.length === 0)
-    catchGenericException(ctx, "Attempted sendmessage w/ empty students list");
+    throwException(ctx, "Attempted sendmessage w/ empty students list");
 
   // Get message
   await ctx.reply("Enter the message you want to send");

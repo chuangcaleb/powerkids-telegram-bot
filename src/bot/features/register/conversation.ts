@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "~/bot/context.js";
-import { catchGenericException } from "~/bot/helpers/conversation/throw-generic-exception.js";
+import { throwException } from "~/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { stripAlphanumeric } from "~/bot/helpers/strip-alphanum.js";
 import { i18n } from "~/bot/i18n.js";
@@ -15,7 +15,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   // catch empty students list
   if (client.students.length === 0)
-    catchGenericException(ctx, "Attempted authentication w/ empty admins list");
+    throwException(ctx, "Attempted register w/ empty admins list");
 
   // NRIC
   await ctx.reply("Enter your child's National IC number");

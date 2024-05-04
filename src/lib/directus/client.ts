@@ -26,6 +26,9 @@ class ApiClient {
           .filter(Boolean)
       );
     } catch (error) {
+      // on error, reset to empty list to prevent operations
+      this.students = [];
+      this.admins = [];
       logger.error(error, "ApiClient.update()");
     }
   }
