@@ -40,7 +40,9 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const id = idCtx.msg.text;
   // TODO: re-prompt if not 8-character alphanumeric
 
-  const adminMatches = client.admins.filter((aId) => aId.id.slice(0, 8) === id);
+  const adminMatches = client.admins.filter(
+    (admin) => admin.id.slice(0, 8) === id
+  );
   // Break on no match
   if (adminMatches.length === 0) {
     await idCtx.reply(
@@ -56,9 +58,10 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  await client.authenticateAdmin(adminMatches[0].id, idCtx.message.from.id);
+  const admin = adminMatches[0];
+  await client.authenticateAdmin(admin.id, idCtx.message.from.id);
   await idCtx.reply(
-    "Successfully authenticated your Telegram account as an admin!"
+    `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin!`
   );
   // TODO: refresh admin list
 }

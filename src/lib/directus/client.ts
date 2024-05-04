@@ -1,4 +1,5 @@
 import { authenticateAdmin, getAdmins, getStudents } from "./methods/index.js";
+import { registerParent } from "./methods/register-parent.js";
 import { Admin, Student } from "./types-gen.js";
 
 class ApiClient {
@@ -23,6 +24,8 @@ class ApiClient {
   }
 
   authenticateAdmin = authenticateAdmin;
+
+  registerParent = registerParent;
 }
 
 const client = new ApiClient();

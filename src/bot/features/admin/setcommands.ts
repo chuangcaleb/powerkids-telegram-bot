@@ -23,6 +23,15 @@ export function getPrivateChatCommands(localeCode: string): BotCommand[] {
       command: "help",
       description: "List available commands",
     },
+    {
+      command: "register",
+      description:
+        "Verify your Telegram account to receive updates for your child",
+    },
+    {
+      command: "cancel",
+      description: "Cancel the current action",
+    },
   ];
 }
 
@@ -35,10 +44,6 @@ export function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
     {
       command: "sendmessage",
       description: "Broadcast a message to the parents of selected students",
-    },
-    {
-      command: "cancel",
-      description: "Cancel the current action",
     },
   ];
 }
