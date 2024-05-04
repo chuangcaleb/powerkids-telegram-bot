@@ -8,7 +8,7 @@ import {
   SessionData,
   createContextConstructor,
 } from "~/bot/context.js";
-import { features, unhandledFeature } from "~/bot/features/composer.js";
+import { features } from "~/bot/features/composer.js";
 import { i18n } from "~/bot/i18n.js";
 import { updateLogger } from "~/bot/middlewares/index.js";
 import { config } from "~/config.js";
@@ -49,9 +49,6 @@ export function createBot(token: string, options: Options = {}) {
 
   // Handlers
   protectedBot.use(features);
-
-  // must be the last handler
-  protectedBot.use(unhandledFeature);
 
   return bot;
 }
