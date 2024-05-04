@@ -9,10 +9,6 @@ import {
 
 const composer = new Composer<Context>();
 
-composer.command("auth", logHandle("command-start"), (ctx) => {
-  return ctx.reply(ctx.t("welcome"));
-});
-
 composer
   .use(authenticateConversation())
   .command(

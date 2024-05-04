@@ -1,12 +1,15 @@
 import { logger } from "~/logger.js";
 import { getAdmins } from "./methods/get-admins.js";
 import { getStudents } from "./methods/get-students.js";
-import { Student } from "./types-gen.js";
+import { authenticateAdmin } from "./methods/authenticate-admin.js";
+import { Admin, Student } from "./types-gen.js";
 
 class Directus {
   students: Student[] = [];
 
-  adminIds: Set<number> = new Set();
+  admins: Admin[] = [];
+
+  adminTelegramIds: Set<number> = new Set();
 
   constructor() {
     this.update();
@@ -15,17 +18,20 @@ class Directus {
   async update() {
     try {
       this.students = await getStudents();
-      const admins = await getAdmins();
+      this.admins = await getAdmins();
+
       // We typecast as Number because Directus list (csv) type only stores as strings
-      this.adminIds = new Set(
-        admins.flatMap((admin) => Number(admin.telegram_ids)).filter(Boolean)
+      this.adminTelegramIds = new Set(
+        this.admins
+          .flatMap((admin) => Number(admin.telegram_ids))
+          .filter(Boolean)
       );
     } catch (error) {
       logger.error(error, "Directus client instance update error");
     }
   }
 
-  // async addAdmin(directusUserId: string, telegramId: number) {}
+  authenticateAdmin = authenticateAdmin;
 }
 
 const directus = new Directus();

@@ -20,8 +20,10 @@ const features = composer.chatType("private");
 
 features.use(startFeature);
 features.use(helpFeature);
-features.use(adminFeatures);
 features.use(authFeature);
+
+// Put admin features later to reduce checks for isAdmin
+features.use(adminFeatures);
 
 // must be the last handler
 features.use(cancelFeature);
