@@ -5,7 +5,7 @@ import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
 import { isAdmin } from "~/bot/helpers/filters/is-admin.js";
 import { i18n } from "~/bot/i18n.js";
 import { config } from "~/config.js";
-import { directus } from "~/lib/directus/client.js";
+import { client } from "~/lib/directus/client.js";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
 
@@ -14,7 +14,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   // Break if already an authenticated admin
   if (isAdmin(ctx)) {
-    const admin = directus.admins.find(({ telegram_ids }) =>
+    const admin = client.admins.find(({ telegram_ids }) =>
       telegram_ids?.includes(String(ctx.message?.from.id))
     );
     // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
@@ -40,9 +40,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const id = idCtx.msg.text;
   // TODO: re-prompt if not 8-character alphanumeric
 
-  const adminMatches = directus.admins.filter(
-    (aId) => aId.id.slice(0, 8) === id
-  );
+  const adminMatches = client.admins.filter((aId) => aId.id.slice(0, 8) === id);
   // Break on no match
   if (adminMatches.length === 0) {
     await idCtx.reply(
@@ -58,7 +56,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  await directus.authenticateAdmin(adminMatches[0].id, idCtx.message.from.id);
+  await client.authenticateAdmin(adminMatches[0].id, idCtx.message.from.id);
   await idCtx.reply(
     "Successfully authenticated your Telegram account as an admin!"
   );
