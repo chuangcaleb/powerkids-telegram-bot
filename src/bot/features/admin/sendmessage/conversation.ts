@@ -77,9 +77,11 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   // send
-  await ctx.reply(
-    `Sending to ${studentSearchResults.map((s) => s.telegram_ids).join(",")}`
-  );
+  const targets = studentSearchResults
+    .flatMap((s) => s.telegram_ids)
+    // could've used a .filter(Boolean) but typescript is angy
+    .filter(<T>(value: T): value is NonNullable<T> => value !== null);
+  await ctx.reply(`Sending to ${targets.join(",")}`);
   await ctx.reply(`The message is:\n\n${message}`);
 }
 
