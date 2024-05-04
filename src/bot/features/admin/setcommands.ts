@@ -36,6 +36,10 @@ export function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
       command: "sendmessage",
       description: "Broadcast a message to the parents of selected students",
     },
+    {
+      command: "cancel",
+      description: "Cancel the current action",
+    },
   ];
 }
 

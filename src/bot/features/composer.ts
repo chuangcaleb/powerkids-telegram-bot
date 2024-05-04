@@ -7,6 +7,7 @@ import { helpFeature } from "./help.js";
 import { languageFeature } from "./language.js";
 import { startFeature } from "./start.js";
 import { unhandledFeature } from "./unhandled.js";
+import { cancelFeature } from "./cancel.js";
 
 export * from "./admin/composer.js";
 export * from "./language.js";
@@ -23,6 +24,7 @@ features.use(adminFeatures);
 features.use(authFeature);
 
 // must be the last handler
+features.use(cancelFeature);
 features.use(unhandledFeature);
 
 if (isMultipleLocales) {

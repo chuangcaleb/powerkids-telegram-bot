@@ -1,7 +1,6 @@
 import { Conversation } from "@grammyjs/conversations";
 import { FilterQuery } from "grammy";
 import { Context } from "~/bot/context.js";
-import { ExitConversationError } from "./exit-convo-error.js";
 
 export async function waitFor<Q extends FilterQuery>(
   conversation: Conversation<Context>,
@@ -14,9 +13,9 @@ export async function waitFor<Q extends FilterQuery>(
       await conversation.skip({ drop: true });
     },
   });
-  // Terminate conversation
+  // Pass over to /cancel handler
   if (ctx.msg?.text === "/cancel") {
-    throw new ExitConversationError();
+    await conversation.skip({ drop: false });
   }
   return ctx;
 }
