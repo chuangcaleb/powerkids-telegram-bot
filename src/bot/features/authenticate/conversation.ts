@@ -18,7 +18,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
       telegram_ids?.includes(String(ctx.message?.from.id))
     );
     // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
-    ctx.reply(`${admin?.first_name}, you are already an admin!`);
+    await ctx.reply(`${admin?.first_name}, you are already an admin!`);
     return;
   }
 

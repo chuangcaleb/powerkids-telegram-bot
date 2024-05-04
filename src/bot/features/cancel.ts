@@ -8,15 +8,15 @@ composer.command("cancel", logHandle("cancel-message"), async (ctx) => {
   const conversationId = Object.keys(await ctx.conversation.active())[0];
 
   if (!conversationId) {
-    ctx.reply("No ongoing action to cancel! (Enter /help for options)");
+    await ctx.reply("No ongoing action to cancel! (Enter /help for options)");
     return;
   }
 
-  ctx.reply(
+  await ctx.reply(
     `Terminated <code>/${conversationId}</code> action.\n` +
       "What else can I do for you? (Enter /help for options)"
   );
-  ctx.conversation.exit();
+  await ctx.conversation.exit();
 });
 
 export { composer as cancelFeature };

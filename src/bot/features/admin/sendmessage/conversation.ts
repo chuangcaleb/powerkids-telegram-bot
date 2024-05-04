@@ -49,7 +49,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
     // if no results, prompt retry
     if (queryResults.length === 0) {
-      nameCtx.reply(
+      await nameCtx.reply(
         "No new close match found. If record does not exist, please contact the developer."
       );
       continue;
