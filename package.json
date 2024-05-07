@@ -61,8 +61,7 @@
     "wrangler": "3.53.1"
   },
   "engines": {
-    "node": ">=20.0.0",
-    "pnpm": ">=9"
+    "node": ">=20.0.0"
   },
   "lint-staged": {
     "*.ts": "pnpm lint"
