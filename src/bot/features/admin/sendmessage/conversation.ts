@@ -1,10 +1,10 @@
-import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "#root/bot/context.js";
 import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { client } from "#root/lib/directus/client.js";
 import { Student } from "#root/lib/directus/types-gen.js";
+import { Conversation, createConversation } from "@grammyjs/conversations";
 import { getFilteredRegistry } from "./get-filtered-registry.js";
 import { pickSubstring } from "./pick-substring.js";
 import { getQueryResults } from "./query.js";
@@ -23,14 +23,16 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await ctx.reply("Enter the message you want to send");
   const messageCtx = await waitFor(conversation, "message:text");
   const message = messageCtx.msg.text;
-
-  // Get targets
-  // TODO: allow comma/newline-delimited bulk input
-  const studentSearchResults: Student[] = [];
   await messageCtx.reply("↑ Forwarding this message ↑", {
     reply_parameters: { message_id: messageCtx.msg.message_id },
   });
-  await messageCtx.reply("Next, enter the name of a student, or send /done");
+
+  // Get targets
+  // TODO: allow comma/newline-delimited bulk input
+  const selectedStudents: Student[] = [];
+  await messageCtx.reply(
+    `Next, enter a student's name, and send /done when you have listed them all`
+  );
 
   while (true) {
     const nameCtx = await waitFor(conversation, "message:text");
@@ -38,7 +40,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
     // If /done, try breaking loop
     if (name === "/done") {
-      if (studentSearchResults.length > 0) break;
+      if (selectedStudents.length > 0) break;
       await nameCtx.reply(
         "Enter at least 1 student's name before sending /done"
       );
@@ -46,7 +48,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     }
 
     // Query for students
-    const registry = getFilteredRegistry(studentSearchResults);
+    const registry = getFilteredRegistry(selectedStudents);
     // eslint-disable-next-line unicorn/no-array-reduce
     const queryResults = [getQueryResults, pickSubstring].reduce(
       (previous, current) =>
@@ -72,19 +74,33 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
       continue;
     }
 
-    // if exactly 1, add to list
+    // if exactly 1, add to list, and then re-prompt
     const result = queryResults[0];
-    const oldStudentsString = studentSearchResults
+    // if no telegram_ids, then skip
+    const telegramIds = result.telegram_ids;
+    if (!telegramIds || telegramIds.length === 0) {
+      await nameCtx.reply(
+        `<b>${result.name}</b> no registered Telegram account to send to.\nEnter another name, or send /done`
+      );
+      continue;
+    }
+    // If has telegram_ids, then add to list
+    const displaySelectedStudents = [
+      ...selectedStudents,
+      { ...result, name: `<b>${result.name}</b>` },
+    ];
+    selectedStudents.push(result);
+
+    const studentsString = displaySelectedStudents
       .map((s) => s.name)
       .join(", ");
-    const studentsList = `(x${studentSearchResults.length + 1}) ${oldStudentsString}${studentSearchResults.length > 0 ? ", " : ""}<b>${result.name}</b>`;
-    const reply = `${studentsList}\nEnter another name, or send /done`;
+    const selectionString = `(x${selectedStudents.length}) ${studentsString}`;
+    const reply = `${selectionString}\nEnter another name, or send /done`;
     await nameCtx.reply(reply);
-    studentSearchResults.push(result);
   }
 
   // send
-  const targets = studentSearchResults
+  const targets = selectedStudents
     .flatMap((s) => s.telegram_ids)
     // could've used a .filter(Boolean) but typescript is angy
     .filter(<T>(value: T): value is NonNullable<T> => value !== null);
