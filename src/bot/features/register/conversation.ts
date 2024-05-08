@@ -15,31 +15,62 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   // catch empty students list
   if (client.students.length === 0)
-    throwException(ctx, "Attempted register w/ empty admins list");
+    throwException(ctx, "Attempted register w/ empty students list");
+  if (client.parents.length === 0)
+    throwException(ctx, "Attempted register w/ empty parents list");
 
-  // NRIC
-  await ctx.reply("Enter your child's National IC number");
-  const icCtx = await waitFor(conversation, "message:text");
-  const rawIc = icCtx.msg.text;
-  const strippedIc = stripAlphanumeric(rawIc);
+  // No sender
+  const sender = ctx.msg?.from?.id;
+  if (!sender) {
+    throwException(ctx, "No message sender");
+    return;
+  }
 
-  const student = client.students.find(
-    (s) => stripAlphanumeric(s.ic) === strippedIc
+  // break if already registered
+  const existingParent = client.parents.find(
+    (p) => Number(p.telegram_id) === sender
   );
+
+  if (existingParent) {
+    ctx.reply(
+      `You are already registered as ${existingParent.name}. Terminated action.`
+    );
+    return;
+  }
+  // prompt enter
+  await ctx.reply("Enter your mobile number");
+  const mobileCtx = await waitFor(conversation, "message:text");
+  const rawMobile = mobileCtx.msg.text;
+  const strippedMobile = stripAlphanumeric(rawMobile);
+
+  const parent = client.parents.find(
+    (s) => stripAlphanumeric(s.mobile) === strippedMobile
+  );
+
   // Break on no match
-  if (!student) {
-    await icCtx.reply(
-      "No IC number match found. Terminated action. Please contact your school as we may not have your child's IC in our records."
+  if (!parent) {
+    await mobileCtx.reply(
+      "No mobile number match found. Terminated action. Please contact your school as we may not have your mobile in our records."
     );
     return;
   }
 
-  // TODO: break if already registered
+  const parentKey = parent.gender === "male" ? "father_to" : "mother_to";
 
-  await client.registerParent(student.ic, icCtx.message.from.id);
-  await icCtx.reply(
-    `IC matches <b>${student.name}</b>! Your Telegram account is now verified and will receive notifications for this child. If you have other children, you will have to /register them separately.`
+  const students = client.students.filter((s) =>
+    parent[parentKey].includes(s.ic)
   );
+
+  await ctx.reply(
+    `Hello, ${parent.name}, parent of ${students.map((s) => s.name).join(", ")}`
+  );
+
+  await client.registerParent(parent.ic, sender);
+  await mobileCtx.reply(
+    `Your Telegram account is now verified and will receive notifications for this child.`
+  );
+
+  client.update();
 }
 
 export function registerConversation() {
