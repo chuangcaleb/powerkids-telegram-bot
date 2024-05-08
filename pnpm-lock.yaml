@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@directus/sdk':
-    specifier: ^15.1.0
-    version: 15.1.0
+    specifier: ^16.0.0
+    version: 16.0.0
   '@grammyjs/auto-chat-action':
     specifier: 0.1.1
     version: 0.1.1(grammy@1.22.4)
@@ -225,15 +225,15 @@ packages:
       which: 4.0.0
     dev: false
 
-  /@directus/sdk@15.1.0:
-    resolution: {integrity: sha512-M2+Z1WmU8Q5KlR22K5ugmBHq10a6tcGl3QuvGKnN+jNwDnRyN5brJxt7FvgtWrY3Q1ToGLxmL37GHAH9s12dlQ==}
+  /@directus/sdk@16.0.0:
+    resolution: {integrity: sha512-DuY32oukjGj24tto27E/2P3z3kwrVtxhM5dqPaVF6GNT50IQVR5g4v+u5nq/6hlrUc8KNispTRFRN/JXRsxV5w==}
     engines: {node: '>=18.0.0'}
     dependencies:
-      '@directus/system-data': 1.0.2
+      '@directus/system-data': 1.0.3
     dev: false
 
-  /@directus/system-data@1.0.2:
-    resolution: {integrity: sha512-PweDAwTz4zImEGJnhoaX8apOCvcAfE0aGQrCSk+3cf1sLso0ShNlcDvUymtVfrqOXy0qT9sLa833bpJVaXF5ng==}
+  /@directus/system-data@1.0.3:
+    resolution: {integrity: sha512-Dr7w2RZiX3/+kBOLqz8KkMHXmDhzVVraaK+CLQNgsB1FOxotuegyWfQxTi+YvDhH9gEs8/yZZBKeyQetcTQfSg==}
     dev: false
 
   /@esbuild-plugins/node-globals-polyfill@0.2.3(esbuild@0.17.19):
