@@ -8,8 +8,10 @@ import { Conversation, createConversation } from "@grammyjs/conversations";
 import { getFilteredRegistry } from "./search/get-filtered-registry.js";
 import { pickSubstring } from "./search/pick-substring.js";
 import { getQueryResults } from "./search/query.js";
-import { getStudentTelegramIds } from "./send/check-registered.js";
+import { getStudentRegisteredParents } from "./send/check-registered.js";
 import { SelectedStudent } from "./types.js";
+import { processPromiseResults } from "./send/feedback.js";
+import { pivot } from "./send/pivot.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -79,8 +81,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     // if exactly 1, add to list, and then re-prompt
     const result = queryResults[0];
     // if no telegram_ids, then skip
-    const [telegramIds, hasTelegramIds] = await getStudentTelegramIds(result);
-    if (!hasTelegramIds) {
+    const parents = await getStudentRegisteredParents(result);
+    if (parents.length === 0) {
       await nameCtx.reply(
         `<b>${result.name}</b> no registered Telegram account to send to.\nEnter another name, or send /done`
       );
@@ -91,7 +93,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
       ...selectedStudents.map((s) => s.student),
       { ...result, name: `<b>${result.name}</b>` },
     ];
-    selectedStudents.push({ student: result, telegramIds });
+    selectedStudents.push({ student: result, parents });
 
     const studentsString = displaySelectedStudents
       .map((s) => s.name)
@@ -102,16 +104,18 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   // send
-  ctx.reply(selectedStudents.map((s) => s.telegramIds).join(","));
-  const targets = [...new Set(selectedStudents.flatMap((s) => s.telegramIds))]
-    // could've used a .filter(Boolean) but typescript is angy
-    .filter(<T>(value: T): value is NonNullable<T> => value !== null)
-    .filter((string) => string !== "");
+  const targets = pivot(selectedStudents);
+  const targetTelegramIds = Object.keys(targets);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const result = await Promise.allSettled(
-    targets.map((target) => ctx.api.sendMessage(target, message))
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const results = await Promise.allSettled(
+    targetTelegramIds.map((target) => ctx.api.sendMessage(target, message))
   );
+
+  const feedback = processPromiseResults(results, targets);
+
+  ctx.reply(feedback);
+  ctx.reply("End of action.");
 }
 
 export function sendmessageConversation() {
