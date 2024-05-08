@@ -100,12 +100,15 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   // send
-  const targets = selectedStudents
-    .flatMap((s) => s.telegram_ids)
+  const targets = [...new Set(selectedStudents.flatMap((s) => s.telegram_ids))]
     // could've used a .filter(Boolean) but typescript is angy
-    .filter(<T>(value: T): value is NonNullable<T> => value !== null);
-  await ctx.reply(`Sending to ${targets.join(",")}`);
-  await ctx.reply(`The message is:\n\n${message}`);
+    .filter(<T>(value: T): value is NonNullable<T> => value !== null)
+    .filter((string) => string !== "");
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const result = await Promise.allSettled(
+    targets.map((target) => ctx.api.sendMessage(target, message))
+  );
 }
 
 export function sendmessageConversation() {
