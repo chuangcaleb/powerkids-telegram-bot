@@ -13,7 +13,6 @@ export function getParent(ic: string) {
         "gender",
         "telegram_id",
       ],
-      limit: 999,
     })
   );
 }
