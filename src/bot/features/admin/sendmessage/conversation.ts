@@ -5,9 +5,9 @@ import { i18n } from "#root/bot/i18n.js";
 import { client } from "#root/lib/directus/client.js";
 import { Student } from "#root/lib/directus/types-gen.js";
 import { Conversation, createConversation } from "@grammyjs/conversations";
-import { getFilteredRegistry } from "./get-filtered-registry.js";
-import { pickSubstring } from "./pick-substring.js";
-import { getQueryResults } from "./query.js";
+import { getFilteredRegistry } from "./search/get-filtered-registry.js";
+import { pickSubstring } from "./search/pick-substring.js";
+import { getQueryResults } from "./search/query.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
