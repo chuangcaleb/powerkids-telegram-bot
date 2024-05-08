@@ -1,4 +1,4 @@
-import { logger } from "~/logger.js";
+import { logger } from "#root/logger.js";
 import { authenticateAdmin, getAdmins, getStudents } from "./methods/index.js";
 import { registerParent } from "./methods/register-parent.js";
 import { Admin, Student } from "./types-gen.js";

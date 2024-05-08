@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { createBot } from "~/bot/index.js";
-import { config } from "~/config.js";
-import { createServer } from "~/server/index.js";
+import { createBot } from "#root/bot/index.js";
+import { config } from "#root/config.js";
+import { createServer } from "#root/server/index.js";
 
 const bot = createBot(config.BOT_TOKEN);
 const server = await createServer(bot);

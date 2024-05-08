@@ -1,7 +1,7 @@
 import { BotCommand } from "@grammyjs/types";
 import { Composer } from "grammy";
-import type { Context } from "~/bot/context.js";
-import { logHandle } from "~/bot/helpers/logging.js";
+import type { Context } from "#root/bot/context.js";
+import { logHandle } from "#root/bot/helpers/logging.js";
 import {
   getPrivateChatAdminCommands,
   getPrivateChatCommands,

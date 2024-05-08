@@ -1,10 +1,10 @@
 import { Conversation, createConversation } from "@grammyjs/conversations";
-import { Context } from "~/bot/context.js";
-import { throwException } from "~/bot/helpers/conversation/throw-exception.js";
-import { waitFor } from "~/bot/helpers/conversation/wait-for.js";
-import { i18n } from "~/bot/i18n.js";
-import { client } from "~/lib/directus/client.js";
-import { Student } from "~/lib/directus/types-gen.js";
+import { Context } from "#root/bot/context.js";
+import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
+import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
+import { i18n } from "#root/bot/i18n.js";
+import { client } from "#root/lib/directus/client.js";
+import { Student } from "#root/lib/directus/types-gen.js";
 import { getFilteredRegistry } from "./get-filtered-registry.js";
 import { pickSubstring } from "./pick-substring.js";
 import { getQueryResults } from "./query.js";

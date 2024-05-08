@@ -1,5 +1,5 @@
-import { Context } from "~/bot/context.js";
-import { client } from "~/lib/directus/client.js";
+import { Context } from "#root/bot/context.js";
+import { client } from "#root/lib/directus/client.js";
 
 export function isAdmin(ctx: Context) {
   const { adminTelegramIds: adminIds } = client;

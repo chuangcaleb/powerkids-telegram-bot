@@ -12,7 +12,7 @@
     "outDir": "build",
     "rootDir": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "#root/*": ["./src/*"]
     }
   },
   "include": ["api/**/*", "src/**/*"]

@@ -1,6 +1,6 @@
 import { Middleware } from "grammy";
 import type { Update } from "@grammyjs/types";
-import type { Context } from "~/bot/context.js";
+import type { Context } from "#root/bot/context.js";
 
 export function getUpdateInfo(ctx: Context): Omit<Update, "update_id"> {
   // eslint-disable-next-line camelcase, @typescript-eslint/no-unused-vars

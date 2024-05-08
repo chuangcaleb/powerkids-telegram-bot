@@ -1,8 +1,8 @@
 import { BotCommand } from "@grammyjs/types";
 import { CommandContext } from "grammy";
-import type { Context } from "~/bot/context.js";
-import { i18n, isMultipleLocales } from "~/bot/i18n.js";
-import { config } from "~/config.js";
+import type { Context } from "#root/bot/context.js";
+import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
+import { config } from "#root/config.js";
 
 const DEFAULT_LANGUAGE_CODE = "en";
 

@@ -1,5 +1,5 @@
 import { Composer } from "grammy";
-import type { Context } from "~/bot/context.js";
+import type { Context } from "#root/bot/context.js";
 import { isMultipleLocales } from "../i18n.js";
 import { adminFeatures } from "./admin/composer.js";
 import { authFeature } from "./authenticate/composer.js";

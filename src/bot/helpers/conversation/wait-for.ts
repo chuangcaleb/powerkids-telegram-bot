@@ -1,6 +1,6 @@
 import { Conversation } from "@grammyjs/conversations";
 import { FilterQuery } from "grammy";
-import { Context } from "~/bot/context.js";
+import { Context } from "#root/bot/context.js";
 
 export async function waitFor<Q extends FilterQuery>(
   conversation: Conversation<Context>,

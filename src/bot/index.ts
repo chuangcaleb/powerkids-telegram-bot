@@ -7,12 +7,12 @@ import {
   Context,
   SessionData,
   createContextConstructor,
-} from "~/bot/context.js";
-import { features } from "~/bot/features/composer.js";
-import { i18n } from "~/bot/i18n.js";
-import { updateLogger } from "~/bot/middlewares/index.js";
-import { config } from "~/config.js";
-import { logger } from "~/logger.js";
+} from "#root/bot/context.js";
+import { features } from "#root/bot/features/composer.js";
+import { i18n } from "#root/bot/i18n.js";
+import { updateLogger } from "#root/bot/middlewares/index.js";
+import { config } from "#root/config.js";
+import { logger } from "#root/logger.js";
 import { errorHandler } from "./helpers/error-handler.js";
 
 type Options = {
