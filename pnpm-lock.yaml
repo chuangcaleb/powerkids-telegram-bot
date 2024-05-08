@@ -61,10 +61,10 @@ dependencies:
     version: 4.9.3
   znv:
     specifier: 0.4.0
-    version: 0.4.0(zod@3.23.7)
+    version: 0.4.0(zod@3.23.8)
   zod:
-    specifier: 3.23.7
-    version: 3.23.7
+    specifier: 3.23.8
+    version: 3.23.8
 
 devDependencies:
   '@types/node':
@@ -2914,7 +2914,7 @@ packages:
       workerd: 1.20240419.0
       ws: 8.17.0
       youch: 3.3.3
-      zod: 3.23.7
+      zod: 3.23.8
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4154,14 +4154,14 @@ packages:
       stacktracey: 2.1.8
     dev: true
 
-  /znv@0.4.0(zod@3.23.7):
+  /znv@0.4.0(zod@3.23.8):
     resolution: {integrity: sha512-6/pGsQhBisLzKdyC90mUCRgYDtCfQ4aQ68sDybexq3GMzqqkp662GH6qIyuCHJC1i72hJPHbWAhccTJVuZUQfA==}
     peerDependencies:
       zod: ^3.13.2
     dependencies:
       colorette: 2.0.20
-      zod: 3.23.7
+      zod: 3.23.8
     dev: false
 
-  /zod@3.23.7:
-    resolution: {integrity: sha512-NBeIoqbtOiUMomACV/y+V3Qfs9+Okr18vR5c/5pHClPpufWOrsx8TENboDPe265lFdfewX2yBtNTLPvnmCxwog==}
+  /zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
