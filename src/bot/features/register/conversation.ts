@@ -6,6 +6,8 @@ import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { stripAlphanumeric } from "#root/bot/helpers/strip-alphanum.js";
 import { i18n } from "#root/bot/i18n.js";
 import { client } from "#root/lib/directus/client.js";
+import { getStudents } from "#root/lib/directus/methods/get-students.js";
+import { getParents } from "#root/lib/directus/methods/get-parents.js";
 
 export const REGISTER_CONVERSATION = "register";
 
@@ -13,10 +15,12 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
   // TODO: passphrase
 
+  const students = await getStudents();
+  const parents = await getParents();
   // catch empty students list
-  if (client.students.length === 0)
+  if (students.length === 0)
     throwException(ctx, "Attempted register w/ empty students list");
-  if (client.parents.length === 0)
+  if (parents.length === 0)
     throwException(ctx, "Attempted register w/ empty parents list");
 
   // No sender
@@ -27,9 +31,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   // break if already registered
-  const existingParent = client.parents.find(
-    (p) => Number(p.telegram_id) === sender
-  );
+  const existingParent = parents.find((p) => Number(p.telegram_id) === sender);
 
   if (existingParent) {
     ctx.reply(
@@ -43,7 +45,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const rawMobile = mobileCtx.msg.text;
   const strippedMobile = stripAlphanumeric(rawMobile);
 
-  const parent = client.parents.find(
+  const parent = parents.find(
     (s) => stripAlphanumeric(s.mobile) === strippedMobile
   );
 
@@ -57,12 +59,10 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   const parentKey = parent.gender === "male" ? "father_to" : "mother_to";
 
-  const students = client.students.filter((s) =>
-    parent[parentKey].includes(s.ic)
-  );
+  const kids = students.filter((s) => parent[parentKey].includes(s.ic));
 
   await ctx.reply(
-    `Hello, ${parent.name}, parent of ${students.map((s) => s.name).join(", ")}`
+    `Hello, ${parent.name}, parent of ${kids.map((s) => s.name).join(", ")}`
   );
 
   await client.registerParent(parent.ic, sender);

@@ -2,14 +2,10 @@ import { logger } from "#root/logger.js";
 import { getParents } from "./methods/get-parents.js";
 import { authenticateAdmin, getAdmins, getStudents } from "./methods/index.js";
 import { registerParent } from "./methods/register-parent.js";
-import { Admin, Parent, Student } from "./types-gen.js";
+import { Admin } from "./types-gen.js";
 
 class ApiClient {
-  students: Student[] = [];
-
   admins: Admin[] = [];
-
-  parents: Parent[] = [];
 
   adminTelegramIds: Set<number> = new Set();
 
@@ -19,9 +15,7 @@ class ApiClient {
 
   async update() {
     try {
-      this.students = await getStudents();
       this.admins = await getAdmins();
-      this.parents = await getParents();
 
       // We typecast as Number because Directus list (csv) type only stores as strings
       this.adminTelegramIds = new Set(
@@ -31,11 +25,14 @@ class ApiClient {
       );
     } catch (error) {
       // on error, reset to empty list to prevent operations
-      this.students = [];
       this.admins = [];
       logger.error(error, "ApiClient.update()");
     }
   }
+
+  getStudents = getStudents;
+
+  getParents = getParents;
 
   authenticateAdmin = authenticateAdmin;
 
