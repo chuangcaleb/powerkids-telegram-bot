@@ -24,8 +24,8 @@ dependencies:
     specifier: 1.10.0
     version: 1.10.0(grammy@1.23.0)
   '@grammyjs/types':
-    specifier: 3.6.2
-    version: 3.6.2
+    specifier: 3.7.0
+    version: 3.7.0
   callback-data:
     specifier: 1.1.1
     version: 1.1.1
@@ -785,10 +785,6 @@ packages:
       grammy: ^1.20.1
     dependencies:
       grammy: 1.23.0
-    dev: false
-
-  /@grammyjs/types@3.6.2:
-    resolution: {integrity: sha512-7OswNRPN72qFUWhysNrY96+5LKBQXgxqw0iNbleYV7G8GB6ZPVdkwFMIZn1Fda2iRKMYT6S6Sxuel0465VGtHQ==}
     dev: false
 
   /@grammyjs/types@3.7.0:
