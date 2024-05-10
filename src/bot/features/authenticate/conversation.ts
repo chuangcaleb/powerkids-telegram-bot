@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { Context } from "#root/bot/context.js";
+import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { isAdmin } from "#root/bot/helpers/filters/is-admin.js";
 import { i18n } from "#root/bot/i18n.js";
@@ -13,8 +14,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
   // FIXME
-  // if (client.admins.length === 0)
-  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
+  if (client.admins.length === 0)
+    throwException(ctx, "Attempted authenticate w/ empty admins list");
 
   // Break if already an authenticated admin
   if (isAdmin(ctx)) {

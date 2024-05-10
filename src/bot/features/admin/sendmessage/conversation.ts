@@ -1,5 +1,8 @@
 import { Context } from "#root/bot/context.js";
-import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
+import {
+  catchException,
+  throwException,
+} from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { getStudents } from "#root/lib/directus/methods/get-students.js";
@@ -9,9 +12,9 @@ import { getFilteredRegistry } from "./search/get-filtered-registry.js";
 import { pickSubstring } from "./search/pick-substring.js";
 import { getQueryResults } from "./search/query.js";
 import { getStudentRegisteredParents } from "./send/check-registered.js";
-import { SelectedStudent } from "./types.js";
 import { processPromiseResults } from "./send/feedback.js";
 import { pivot } from "./send/pivot.js";
+import { SelectedStudent } from "./types.js";
 
 export const SENDMESSAGE_CONVERSATION = "sendmessage";
 
@@ -19,7 +22,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
   // catch empty students list
-  const students = await getStudents();
+  const students = await getStudents().catch(catchException(ctx));
+
   if (students.length === 0)
     throwException(ctx, "Attempted sendmessage w/ empty students list");
 

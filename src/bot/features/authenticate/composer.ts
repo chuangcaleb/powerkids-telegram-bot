@@ -1,7 +1,7 @@
-import { chatAction } from "@grammyjs/auto-chat-action";
-import { Composer } from "grammy";
 import type { Context } from "#root/bot/context.js";
 import { logHandle } from "#root/bot/helpers/logging.js";
+import { chatAction } from "@grammyjs/auto-chat-action";
+import { Composer } from "grammy";
 import {
   AUTHENTICATE_CONVERSATION,
   authenticateConversation,

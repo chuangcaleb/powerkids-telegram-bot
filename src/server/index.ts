@@ -24,13 +24,9 @@ export const createServer = async (bot: Bot) => {
       await bot.api.setWebhook(webhookUrl, {
         allowed_updates: config.BOT_ALLOWED_UPDATES,
       });
-      await response.send({
-        status: true,
-      });
+      await response.send({ status: true });
     } else {
-      await response.status(500).send({
-        status: false,
-      });
+      await response.status(500).send({ status: false });
     }
   });
 

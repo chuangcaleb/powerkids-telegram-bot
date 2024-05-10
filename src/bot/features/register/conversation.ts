@@ -1,13 +1,16 @@
 /* eslint-disable camelcase */
-import { Conversation, createConversation } from "@grammyjs/conversations";
 import { Context } from "#root/bot/context.js";
-import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
+import {
+  catchException,
+  throwException,
+} from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { stripAlphanumeric } from "#root/bot/helpers/strip-alphanum.js";
 import { i18n } from "#root/bot/i18n.js";
 import { client } from "#root/lib/directus/client.js";
-import { getStudents } from "#root/lib/directus/methods/get-students.js";
 import { getParents } from "#root/lib/directus/methods/get-parents.js";
+import { getStudents } from "#root/lib/directus/methods/get-students.js";
+import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const REGISTER_CONVERSATION = "register";
 
@@ -15,8 +18,11 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
   // TODO: passphrase
 
-  const students = await getStudents();
-  const parents = await getParents();
+  const [students, parents] = await Promise.all([
+    getStudents(),
+    getParents(),
+  ]).catch(catchException(ctx));
+
   // catch empty students list
   if (students.length === 0)
     throwException(ctx, "Attempted register w/ empty students list");
