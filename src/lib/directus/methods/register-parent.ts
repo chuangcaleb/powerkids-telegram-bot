@@ -1,5 +1,5 @@
 import { updateItem } from "@directus/sdk";
-import { client } from "../base-client.js";
+import { client } from "../client.js";
 
 export async function registerParent(parentIc: string, telegramId: number) {
   return client.request(

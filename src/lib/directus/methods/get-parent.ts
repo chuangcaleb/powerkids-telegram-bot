@@ -1,5 +1,5 @@
 import { readItem } from "@directus/sdk";
-import { client } from "../base-client.js";
+import { client } from "../client.js";
 
 export function getParent(ic: string) {
   return client.request(

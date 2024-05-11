@@ -1,5 +1,5 @@
 import { readUser, updateUser } from "@directus/sdk";
-import { client } from "../base-client.js";
+import { client } from "../client.js";
 
 export async function authenticateAdmin(userId: string, telegramId: number) {
   const { telegram_ids: oldTelegramIds } = await client.request(

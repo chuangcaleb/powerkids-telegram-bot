@@ -1,5 +1,5 @@
 import { readUsers } from "@directus/sdk";
-import { client } from "../base-client.js";
+import { client } from "../client.js";
 
 export function validateAdmin(telegramId: number) {
   return client.request(
