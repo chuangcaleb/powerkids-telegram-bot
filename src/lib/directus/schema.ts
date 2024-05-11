@@ -1,7 +1,6 @@
 interface SchemaStudent {
   name: string;
   ic: string;
-  telegram_ids: string[] | null;
   father: string;
   mother: string;
 }

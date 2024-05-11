@@ -5,9 +5,7 @@ import { logger } from "#root/logger.js";
 import { config } from "#root/config.js";
 
 export const createServer = async (bot: Bot) => {
-  const server = fastify({
-    logger,
-  });
+  const server = fastify({ logger });
 
   server.setErrorHandler(async (error, request, response) => {
     logger.error(error);
