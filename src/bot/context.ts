@@ -1,11 +1,11 @@
-import { Update, UserFromGetMe } from "@grammyjs/types";
-import { Context as DefaultContext, SessionFlavor, type Api } from "grammy";
+import type { Logger } from "#root/logger.js";
 import type { AutoChatActionFlavor } from "@grammyjs/auto-chat-action";
+import { ConversationFlavor } from "@grammyjs/conversations";
 import type { HydrateFlavor } from "@grammyjs/hydrate";
 import type { I18nFlavor } from "@grammyjs/i18n";
 import type { ParseModeFlavor } from "@grammyjs/parse-mode";
-import type { Logger } from "#root/logger.js";
-import { ConversationFlavor } from "@grammyjs/conversations";
+import { Update, UserFromGetMe } from "@grammyjs/types";
+import { Context as DefaultContext, SessionFlavor, type Api } from "grammy";
 
 export type SessionData = {
   // field?: string;
@@ -37,9 +37,7 @@ export function createContextConstructor({ logger }: Dependencies) {
     constructor(update: Update, api: Api, me: UserFromGetMe) {
       super(update, api, me);
 
-      Object.defineProperty(this, "logger", {
-        writable: true,
-      });
+      Object.defineProperty(this, "logger", { writable: true });
 
       this.logger = logger.child({
         update_id: this.update.update_id,

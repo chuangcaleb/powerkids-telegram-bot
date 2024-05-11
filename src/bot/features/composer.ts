@@ -10,11 +10,6 @@ import { registerFeature } from "./register/composer.js";
 import { startFeature } from "./start.js";
 import { unhandledFeature } from "./unhandled.js";
 
-export * from "./admin/composer.js";
-export * from "./language.js";
-export * from "./start.js";
-export * from "./unhandled.js";
-
 const composer = new Composer<Context>();
 
 const features = composer.chatType("private");
