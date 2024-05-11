@@ -4,8 +4,9 @@ import { checkIsAdmin } from "#root/bot/helpers/admin-boundary.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
-import { client } from "#root/lib/directus/client.js";
+import { client } from "#root/lib/directus/base-client.js";
 import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
+import { readUsers } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
@@ -39,16 +40,18 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  // Verify admin (db) ID — using first 8 chars
-
-  await ctx.reply("Enter 8-character admin ID");
+  // Verify admin (db) ID
+  await ctx.reply("Enter your admin ID");
   const idCtx = await waitFor(conversation, "message:text");
   const id = idCtx.msg.text;
-  // TODO: re-prompt if not 8-character alphanumeric
 
-  const adminMatches = client.admins.filter(
-    (admin) => admin.id.slice(0, 8) === id
+  const adminMatches = await client.request(
+    readUsers({
+      fields: ["id", "first_name"],
+      filter: { id: { _eq: id } },
+    })
   );
+
   // Break on no match
   if (adminMatches.length === 0) {
     await idCtx.reply(
