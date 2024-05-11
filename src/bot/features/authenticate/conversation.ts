@@ -69,7 +69,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   // refresh admin list
   await client.updateAdmins();
   await idCtx.reply(
-    `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin!`
+    `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`
   );
 }
 
