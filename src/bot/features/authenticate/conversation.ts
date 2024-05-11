@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import { Context } from "#root/bot/context.js";
-import { getCurrentAdmin } from "#root/bot/helpers/admin-boundary.js";
-import { catchException } from "#root/bot/helpers/conversation/throw-exception.js";
+import { checkIsAdmin } from "#root/bot/helpers/admin-boundary.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
@@ -14,6 +13,21 @@ export const AUTHENTICATE_CONVERSATION = "authenticate";
 
 async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
+
+  // FIXME
+  // if (client.admins.length === 0)
+  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
+
+  // FIXME Break if already an authenticated admin
+  if (await checkIsAdmin(ctx)) {
+    // const admin = client.admins.find(({ telegram_ids }) =>
+    //   telegram_ids?.includes(String(ctx.message?.from.id))
+    // );
+    // // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
+    await ctx.reply(`You are already an admin!`);
+    // await ctx.reply(`${admin?.first_name}, you are already an admin!`);
+    return;
+  }
 
   // Passphrase
   await ctx.reply("Enter admin passphrase");
@@ -54,7 +68,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  await authenticateAdmin(databaseId, idCtx.message.from.id);
+  const admin = adminMatches[0];
+  await authenticateAdmin(admin.id, idCtx.message.from.id);
 
   await idCtx.reply(
     `Hello, ${adminMatch.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`
