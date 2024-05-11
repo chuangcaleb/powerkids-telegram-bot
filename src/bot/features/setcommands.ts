@@ -1,8 +1,11 @@
-import { BotCommand } from "@grammyjs/types";
-import { CommandContext } from "grammy";
 import type { Context } from "#root/bot/context.js";
 import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
+import { chatAction } from "@grammyjs/auto-chat-action";
+import { BotCommand } from "@grammyjs/types";
+import { CommandContext, Composer } from "grammy";
+import { adminBoundary } from "../helpers/admin-boundary.js";
+import { logHandle } from "../helpers/logging.js";
 
 const DEFAULT_LANGUAGE_CODE = "en";
 
@@ -112,3 +115,16 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
 
   return ctx.reply(ctx.t("admin.commands-updated"));
 }
+
+const composer = new Composer<Context>();
+
+composer
+  .command("setcommands")
+  .filter(
+    adminBoundary(),
+    logHandle("command-setcommands"),
+    chatAction("typing"),
+    setCommandsHandler
+  );
+
+export { composer as setCommandsFeature };

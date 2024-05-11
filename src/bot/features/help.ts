@@ -6,7 +6,7 @@ import { isAdmin } from "../helpers/filters/is-admin.js";
 import {
   getPrivateChatAdminCommands,
   getPrivateChatCommands,
-} from "./admin/setcommands.js";
+} from "./setcommands.js";
 
 const composer = new Composer<Context>();
 
