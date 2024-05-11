@@ -6,6 +6,7 @@ import { isAdmin } from "#root/bot/helpers/filters/is-admin.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
 import { client } from "#root/lib/directus/client.js";
+import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
 import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
@@ -64,7 +65,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   const admin = adminMatches[0];
-  await client.authenticateAdmin(admin.id, idCtx.message.from.id);
+  await authenticateAdmin(admin.id, idCtx.message.from.id);
   // refresh admin list
   await client.updateAdmins();
   await idCtx.reply(

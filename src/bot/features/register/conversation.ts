@@ -7,9 +7,9 @@ import {
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { stripAlphanumeric } from "#root/bot/helpers/strip-alphanum.js";
 import { i18n } from "#root/bot/i18n.js";
-import { client } from "#root/lib/directus/client.js";
 import { getParents } from "#root/lib/directus/methods/get-parents.js";
 import { getStudents } from "#root/lib/directus/methods/get-students.js";
+import { registerParent } from "#root/lib/directus/methods/register-parent.js";
 import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const REGISTER_CONVERSATION = "register";
@@ -62,7 +62,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     throwException(ctx, "Attempted register w/ empty students list");
   const kids = students.filter((s) => parent[parentKey].includes(s.ic));
 
-  await client.registerParent(parent.ic, sender);
+  await registerParent(parent.ic, sender);
 
   await ctx.reply(
     `Hello, ${parent.name}, parent of ${kids.map((s) => s.name).join(", ")}\nYour Telegram account is now verified and will receive notifications for this child.`

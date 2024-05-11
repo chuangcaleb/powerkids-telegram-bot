@@ -1,7 +1,5 @@
 import { logger } from "#root/logger.js";
-import { getParents } from "./methods/get-parents.js";
-import { authenticateAdmin, getAdmins, getStudents } from "./methods/index.js";
-import { registerParent } from "./methods/register-parent.js";
+import { getAdmins } from "./methods/get-admins.js";
 import { Admin } from "./types-gen.js";
 
 class ApiClient {
@@ -26,17 +24,9 @@ class ApiClient {
     } catch (error) {
       // on error, reset to empty list to prevent operations
       this.admins = [];
-      logger.error(error, "ApiClient.update()");
+      logger.error(error, "ApiClient.updateAdmins()");
     }
   }
-
-  getStudents = getStudents;
-
-  getParents = getParents;
-
-  authenticateAdmin = authenticateAdmin;
-
-  registerParent = registerParent;
 }
 
 const client = new ApiClient();

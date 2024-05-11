@@ -11,9 +11,4 @@ async function getStudentParents(student: Student) {
 export async function getStudentRegisteredParents(student: Student) {
   const parents = await getStudentParents(student);
   return parents.filter((p) => !!p.telegram_id);
-  // return [
-  //   // could've used a .filter(Boolean) but typescript is angy
-  //   ids.filter(<T>(value: T): value is NonNullable<T> => value !== null),
-  //   ids.some(Boolean),
-  // ];
 }
