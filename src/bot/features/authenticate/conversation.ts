@@ -4,9 +4,9 @@ import { checkIsAdmin } from "#root/bot/helpers/admin-boundary.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
-import { client } from "#root/lib/directus/client.js";
+import { client } from "#root/lib/directus/base-client.js";
 import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
-import { readUser } from "@directus/sdk";
+import { readUsers } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
@@ -39,14 +39,23 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  // FIXME
-  // if (client.admins.length === 0)
-  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
+  // Verify admin (db) ID
+  await ctx.reply("Enter your admin ID");
+  const idCtx = await waitFor(conversation, "message:text");
+  const id = idCtx.msg.text;
 
-  // Break if already an authenticated admin
-  const currentAdmin = await getCurrentAdmin(ctx).catch(catchException(ctx));
-  if (currentAdmin) {
-    await ctx.reply(`${currentAdmin.first_name}, you are already an admin!`);
+  const adminMatches = await client.request(
+    readUsers({
+      fields: ["id", "first_name"],
+      filter: { id: { _eq: id } },
+    })
+  );
+
+  // Break on no match
+  if (adminMatches.length === 0) {
+    await idCtx.reply(
+      "No ID match found. Terminated action. Please contact developer."
+    );
     return;
   }
 
