@@ -65,10 +65,11 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   const admin = adminMatches[0];
   await client.authenticateAdmin(admin.id, idCtx.message.from.id);
+  // refresh admin list
+  await client.updateAdmins();
   await idCtx.reply(
     `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin!`
   );
-  // TODO: refresh admin list
 }
 
 export function authenticateConversation() {

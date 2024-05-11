@@ -18,20 +18,15 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
   // TODO: passphrase
 
-  const parents = await getParents().catch(catchException(ctx));
-
-  // catch empty students list
-  // if (students.length === 0)
-  //   throwException(ctx, "Attempted register w/ empty students list");
-  if (parents.length === 0)
-    throwException(ctx, "Attempted register w/ empty parents list");
-
   // No sender
   const sender = ctx.msg?.from?.id;
-  if (!sender) {
-    throwException(ctx, "No message sender");
-    return;
-  }
+  if (!sender) throwException(ctx, "No message sender");
+
+  const parents = await getParents().catch(catchException(ctx));
+
+  // catch empty parents list
+  if (parents.length === 0)
+    throwException(ctx, "Attempted register w/ empty parents list");
 
   // break if already registered
   const existingParent = parents.find((p) => Number(p.telegram_id) === sender);
@@ -63,6 +58,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const parentKey = parent.gender === "male" ? "father_to" : "mother_to";
 
   const students = await getStudents().catch(catchException(ctx));
+  if (students.length === 0)
+    throwException(ctx, "Attempted register w/ empty students list");
   const kids = students.filter((s) => parent[parentKey].includes(s.ic));
 
   await client.registerParent(parent.ic, sender);
@@ -70,8 +67,6 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await ctx.reply(
     `Hello, ${parent.name}, parent of ${kids.map((s) => s.name).join(", ")}\nYour Telegram account is now verified and will receive notifications for this child.`
   );
-
-  client.update();
 }
 
 export function registerConversation() {

@@ -10,10 +10,10 @@ class ApiClient {
   adminTelegramIds: Set<number> = new Set();
 
   constructor() {
-    this.update();
+    this.updateAdmins();
   }
 
-  async update() {
+  async updateAdmins() {
     try {
       this.admins = await getAdmins();
 
