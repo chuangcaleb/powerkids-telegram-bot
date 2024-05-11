@@ -2,11 +2,11 @@ import type { Context } from "#root/bot/context.js";
 import { logHandle } from "#root/bot/helpers/logging.js";
 import { BotCommand } from "@grammyjs/types";
 import { Composer } from "grammy";
-import { isAdmin } from "../helpers/filters/is-admin.js";
 import {
   getPrivateChatAdminCommands,
   getPrivateChatCommands,
 } from "./setcommands.js";
+import { checkIsAdmin } from "../helpers/admin-boundary.js";
 
 const composer = new Composer<Context>();
 
@@ -20,7 +20,7 @@ composer.command("help", logHandle("command-help"), async (ctx) => {
   const locale = await ctx.i18n.getLocale();
   const privateCommands = composeCommandList(getPrivateChatCommands(locale));
   const adminCommands =
-    isAdmin(ctx) &&
+    (await checkIsAdmin(ctx)) &&
     `\n*Admin commands*\n${composeCommandList(getPrivateChatAdminCommands(locale))}`;
 
   const message = [

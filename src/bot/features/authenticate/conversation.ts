@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 import { Context } from "#root/bot/context.js";
-import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
+import { checkIsAdmin } from "#root/bot/helpers/admin-boundary.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
-import { isAdmin } from "#root/bot/helpers/filters/is-admin.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
 import { client } from "#root/lib/directus/client.js";
@@ -15,16 +14,17 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
   // FIXME
-  if (client.admins.length === 0)
-    throwException(ctx, "Attempted authenticate w/ empty admins list");
+  // if (client.admins.length === 0)
+  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
 
-  // Break if already an authenticated admin
-  if (isAdmin(ctx)) {
-    const admin = client.admins.find(({ telegram_ids }) =>
-      telegram_ids?.includes(String(ctx.message?.from.id))
-    );
-    // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
-    await ctx.reply(`${admin?.first_name}, you are already an admin!`);
+  // FIXME Break if already an authenticated admin
+  if (await checkIsAdmin(ctx)) {
+    // const admin = client.admins.find(({ telegram_ids }) =>
+    //   telegram_ids?.includes(String(ctx.message?.from.id))
+    // );
+    // // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
+    await ctx.reply(`You are already an admin!`);
+    // await ctx.reply(`${admin?.first_name}, you are already an admin!`);
     return;
   }
 
@@ -66,8 +66,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   const admin = adminMatches[0];
   await authenticateAdmin(admin.id, idCtx.message.from.id);
-  // refresh admin list
-  await client.updateAdmins();
+
   await idCtx.reply(
     `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`
   );
