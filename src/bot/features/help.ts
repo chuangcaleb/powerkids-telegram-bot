@@ -1,7 +1,8 @@
-import { BotCommand } from "@grammyjs/types";
-import { Composer } from "grammy";
 import type { Context } from "#root/bot/context.js";
 import { logHandle } from "#root/bot/helpers/logging.js";
+import { BotCommand } from "@grammyjs/types";
+import { Composer } from "grammy";
+import { isAdmin } from "../helpers/filters/is-admin.js";
 import {
   getPrivateChatAdminCommands,
   getPrivateChatCommands,
@@ -17,17 +18,19 @@ function composeCommandList(commands: BotCommand[]) {
 
 composer.command("help", logHandle("command-help"), async (ctx) => {
   const locale = await ctx.i18n.getLocale();
-  const privateCommands = getPrivateChatCommands(locale);
-  const adminCommands = getPrivateChatAdminCommands(locale);
+  const privateCommands = composeCommandList(getPrivateChatCommands(locale));
+  const adminCommands =
+    isAdmin(ctx) &&
+    `\n*Admin commands*\n${composeCommandList(getPrivateChatAdminCommands(locale))}`;
+
   const message = [
-    "Official [PowerKids Kindergarten](https://powerkids.edu.my) Telegram Bot\n",
-    composeCommandList(privateCommands),
-    !!adminCommands &&
-      `\n*Admin commands*\n${composeCommandList(adminCommands)}`,
+    '<b>Official <a href="https://powerkids.edu.my">PowerKids Kindergarten</a> Telegram Bot</b>\n',
+    privateCommands,
+    adminCommands,
   ]
     .filter(Boolean)
     .join("\n");
-  return ctx.reply(message, { parse_mode: "MarkdownV2" });
+  return ctx.reply(message);
 });
 
 export { composer as helpFeature };
