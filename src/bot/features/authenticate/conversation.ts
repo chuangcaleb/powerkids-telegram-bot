@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Context } from "#root/bot/context.js";
 import { getCurrentAdmin } from "#root/bot/helpers/admin-boundary.js";
+import { catchException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
@@ -19,7 +20,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   //   throwException(ctx, "Attempted authenticate w/ empty admins list");
 
   // FIXME Break if already an authenticated admin
-  const currentAdmin = await getCurrentAdmin(ctx);
+  const currentAdmin = await getCurrentAdmin(ctx).catch(catchException(ctx));
   if (currentAdmin) {
     await ctx.reply(`${currentAdmin.first_name}, you are already an admin!`);
     return;
