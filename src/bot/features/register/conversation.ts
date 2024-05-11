@@ -18,14 +18,11 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
   // TODO: passphrase
 
-  const [students, parents] = await Promise.all([
-    getStudents(),
-    getParents(),
-  ]).catch(catchException(ctx));
+  const parents = await getParents().catch(catchException(ctx));
 
   // catch empty students list
-  if (students.length === 0)
-    throwException(ctx, "Attempted register w/ empty students list");
+  // if (students.length === 0)
+  //   throwException(ctx, "Attempted register w/ empty students list");
   if (parents.length === 0)
     throwException(ctx, "Attempted register w/ empty parents list");
 
@@ -65,15 +62,13 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   const parentKey = parent.gender === "male" ? "father_to" : "mother_to";
 
+  const students = await getStudents().catch(catchException(ctx));
   const kids = students.filter((s) => parent[parentKey].includes(s.ic));
 
-  await ctx.reply(
-    `Hello, ${parent.name}, parent of ${kids.map((s) => s.name).join(", ")}`
-  );
-
   await client.registerParent(parent.ic, sender);
-  await mobileCtx.reply(
-    `Your Telegram account is now verified and will receive notifications for this child.`
+
+  await ctx.reply(
+    `Hello, ${parent.name}, parent of ${kids.map((s) => s.name).join(", ")}\nYour Telegram account is now verified and will receive notifications for this child.`
   );
 
   client.update();
