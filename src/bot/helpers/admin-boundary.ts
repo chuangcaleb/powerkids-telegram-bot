@@ -1,11 +1,29 @@
 import { Context } from "#root/bot/context.js";
-import { validateAdmin } from "#root/lib/directus/methods/validate-admin.js";
+import { client } from "#root/lib/directus/client.js";
+import { readUsers } from "@directus/sdk";
 
-export async function checkIsAdmin(ctx: Context) {
+export async function getCurrentAdmin(ctx: Context) {
   const sender = ctx.msg?.from?.id;
   if (!sender) return false;
-  const admins = await validateAdmin(sender);
-  return admins.length > 0;
+  const admins = await client.request(
+    readUsers({
+      fields: ["first_name", "telegram_ids"],
+      filter: {
+        telegram_ids: {
+          // @ts-expect-error: Ah, CSV field is stored as plain string. Typechecking doesn't allow certain array queries
+          // https://github.com/directus/directus/issues/22176
+          _contains: String(sender),
+        },
+      },
+      limit: 1,
+    })
+  );
+  if (!admins) return;
+  return admins[0];
+}
+
+export async function checkIsAdmin(ctx: Context) {
+  return !!(await getCurrentAdmin(ctx));
 }
 
 // isAdminTrue controls whether to flip the result
