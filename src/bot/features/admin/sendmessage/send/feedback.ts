@@ -1,31 +1,35 @@
 import { MessageXFragment } from "@grammyjs/hydrate/out/data/message.js";
 import { Message } from "@grammyjs/types";
-import { TargetMeta, Targets } from "../types.js";
+import { TargetMeta } from "../types.js";
 
-function processOne(
-  result: PromiseSettledResult<
-    Message.CommonMessage & MessageXFragment & Message
-  >,
-  targetMeta: TargetMeta
-) {
+type SendMessageSettledPromise = PromiseSettledResult<
+  Message.CommonMessage & MessageXFragment & Message
+>;
+export interface MetaResult {
+  targetMeta: TargetMeta;
+  result: SendMessageSettledPromise;
+}
+
+function processOne(metaResult: MetaResult) {
+  const { result, targetMeta } = metaResult;
   const { children, parent } = targetMeta;
-  const identifier = `${children.join(", ")} → <i>${parent}</i>`;
+  const identifier = `<b>${children.join(", ")}</b> → <i>${parent}</i>`;
   if (result.status === "fulfilled") {
     return `✅ ${identifier}`;
   }
-  return `❌ ${identifier}\n— <i>${String(result.reason)}</i>`;
+  return `\n❌ ${identifier}\n  ↳ <i>${String(result.reason)}</i>`;
 }
 
-export function processPromiseResults(
-  allResults: PromiseSettledResult<
-    Message.CommonMessage & MessageXFragment & Message
-  >[],
-  targets: Targets
-) {
-  const studentsArray = Object.values(targets);
-
-  const logs = allResults
-    .map((result, index) => processOne(result, studentsArray[index]))
+export function processPromiseResults(metaResults: MetaResult[]) {
+  const logs = metaResults
+    // sort (group) by status so 'fulfilled' is first, rejected later
+    .sort((a, b) => {
+      if (a.result.status === b.result.status) return 0;
+      if (a.result.status === "rejected" && b.result.status === "fulfilled")
+        return 1;
+      return -1;
+    })
+    .map((metaResult) => processOne(metaResult))
     .join("\n");
-  return `Message broadcasted:\n${logs}`;
+  return `<b><u>Message broadcasted</u></b>\n\n${logs}`;
 }

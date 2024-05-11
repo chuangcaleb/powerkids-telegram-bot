@@ -111,15 +111,18 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const targets = pivot(selectedStudents);
   const targetTelegramIds = Object.keys(targets);
 
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const results = await Promise.allSettled(
-    targetTelegramIds.map((target) => ctx.api.sendMessage(target, message))
+    targetTelegramIds.map((targetId) => ctx.api.sendMessage(targetId, message))
   );
+  const metaResults = results.map((result, index) => ({
+    result,
+    targetMeta: targets[targetTelegramIds[index]],
+  }));
 
-  const feedback = processPromiseResults(results, targets);
+  const feedback = processPromiseResults(metaResults);
 
-  ctx.reply(feedback);
-  ctx.reply("End of action.");
+  await ctx.reply(feedback);
+  await ctx.reply("End of action.");
 }
 
 export function sendmessageConversation() {
