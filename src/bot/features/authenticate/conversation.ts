@@ -4,7 +4,7 @@ import { checkIsAdmin } from "#root/bot/helpers/admin-boundary.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
-import { client } from "#root/lib/directus/base-client.js";
+import { client } from "#root/lib/directus/client.js";
 import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
 import { readUsers } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
