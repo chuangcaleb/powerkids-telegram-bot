@@ -19,9 +19,10 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
   // Get message
-  await ctx.reply("Enter the message you want to send");
-  const messageCtx = await waitFor(conversation, "message:text");
-  const message = messageCtx.msg.text;
+  await ctx.reply(
+    "Enter your broadcast message or (uncompressed) photo with caption"
+  );
+  const messageCtx = await waitFor(conversation, "message");
   await messageCtx.reply("↑ Forwarding this message ↑", {
     reply_parameters: { message_id: messageCtx.msg.message_id },
   });
@@ -107,8 +108,15 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const targetTelegramIds = Object.keys(targets);
 
   const results = await Promise.allSettled(
-    targetTelegramIds.map((targetId) => ctx.api.sendMessage(targetId, message))
+    targetTelegramIds.map(async (targetId) =>
+      ctx.api.copyMessage(
+        targetId,
+        messageCtx.msg.from.id,
+        messageCtx.msg.message_id
+      )
+    )
   );
+
   const metaResults = results.map((result, index) => ({
     result,
     targetMeta: targets[targetTelegramIds[index]],

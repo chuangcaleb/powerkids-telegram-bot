@@ -1,13 +1,12 @@
-import { MessageXFragment } from "@grammyjs/hydrate/out/data/message.js";
-import { Message } from "@grammyjs/types";
+import { MessageId } from "@grammyjs/types";
 import { TargetMeta } from "../types.js";
 
-type SendMessageSettledPromise = PromiseSettledResult<
-  Message.CommonMessage & MessageXFragment & Message
->;
+// type SendMessageSettledPromise = PromiseSettledResult<
+//   Message.CommonMessage & MessageXFragment & Message
+// >;
 export interface MetaResult {
+  result: PromiseSettledResult<MessageId>;
   targetMeta: TargetMeta;
-  result: SendMessageSettledPromise;
 }
 
 function processOne(metaResult: MetaResult) {
