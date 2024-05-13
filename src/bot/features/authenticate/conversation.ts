@@ -15,17 +15,6 @@ export const AUTHENTICATE_CONVERSATION = "authenticate";
 async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
-  // FIXME
-  // if (client.admins.length === 0)
-  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
-
-  // FIXME Break if already an authenticated admin
-  const currentAdmin = await getCurrentAdmin(ctx).catch(catchException(ctx));
-  if (currentAdmin) {
-    await ctx.reply(`${currentAdmin.first_name}, you are already an admin!`);
-    return;
-  }
-
   // Passphrase
   await ctx.reply("Enter admin passphrase");
   const passphraseCtx = await waitFor(conversation, "message:text");
@@ -33,6 +22,17 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
 
   if (passphrase !== config.ADMIN_PASSPHRASE) {
     await passphraseCtx.reply("Wrong passphrase! Terminated action.");
+    return;
+  }
+
+  // FIXME
+  // if (client.admins.length === 0)
+  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
+
+  // Break if already an authenticated admin
+  const currentAdmin = await getCurrentAdmin(ctx).catch(catchException(ctx));
+  if (currentAdmin) {
+    await ctx.reply(`${currentAdmin.first_name}, you are already an admin!`);
     return;
   }
 
