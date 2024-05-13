@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
 import { Context } from "#root/bot/context.js";
-import { throwException } from "#root/bot/helpers/conversation/throw-exception.js";
+import { getCurrentAdmin } from "#root/bot/helpers/admin-boundary.js";
+import { catchException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
-import { isAdmin } from "#root/bot/helpers/filters/is-admin.js";
 import { i18n } from "#root/bot/i18n.js";
 import { config } from "#root/config.js";
 import { client } from "#root/lib/directus/client.js";
 import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
+import { readUser } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
@@ -14,22 +15,7 @@ export const AUTHENTICATE_CONVERSATION = "authenticate";
 async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
-  // FIXME
-  if (client.admins.length === 0)
-    throwException(ctx, "Attempted authenticate w/ empty admins list");
-
-  // Break if already an authenticated admin
-  if (isAdmin(ctx)) {
-    const admin = client.admins.find(({ telegram_ids }) =>
-      telegram_ids?.includes(String(ctx.message?.from.id))
-    );
-    // ah lazy to enforce type, isAdmin should ensure admin?.first_name has a value
-    await ctx.reply(`${admin?.first_name}, you are already an admin!`);
-    return;
-  }
-
   // Passphrase
-
   await ctx.reply("Enter admin passphrase");
   const passphraseCtx = await waitFor(conversation, "message:text");
   const passphrase = passphraseCtx.msg.text;
@@ -39,37 +25,39 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     return;
   }
 
-  // Verify admin (db) ID — using first 8 chars
+  // FIXME
+  // if (client.admins.length === 0)
+  //   throwException(ctx, "Attempted authenticate w/ empty admins list");
 
-  await ctx.reply("Enter 8-character admin ID");
+  // Break if already an authenticated admin
+  const currentAdmin = await getCurrentAdmin(ctx).catch(catchException(ctx));
+  if (currentAdmin) {
+    await ctx.reply(`${currentAdmin.first_name}, you are already an admin!`);
+    return;
+  }
+
+  // Verify admin (db) ID
+  await ctx.reply("Enter your admin ID");
   const idCtx = await waitFor(conversation, "message:text");
-  const id = idCtx.msg.text;
-  // TODO: re-prompt if not 8-character alphanumeric
+  const databaseId = idCtx.msg.text;
 
-  const adminMatches = client.admins.filter(
-    (admin) => admin.id.slice(0, 8) === id
-  );
+  const adminMatch = await client
+    .request(readUser(databaseId, { fields: ["first_name"] }))
+    // FIXME: annotate for FORBIDDEN matches
+    .catch(() => {});
+
   // Break on no match
-  if (adminMatches.length === 0) {
+  if (!adminMatch) {
     await idCtx.reply(
       "No ID match found. Terminated action. Please contact developer."
     );
     return;
   }
-  // Break on possible ID collision
-  if (adminMatches.length > 1) {
-    await idCtx.reply(
-      "ID collision. Terminated action. Please contact developer."
-    );
-    return;
-  }
 
-  const admin = adminMatches[0];
-  await authenticateAdmin(admin.id, idCtx.message.from.id);
-  // refresh admin list
-  await client.updateAdmins();
+  await authenticateAdmin(databaseId, idCtx.message.from.id);
+
   await idCtx.reply(
-    `Hello, ${admin.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`
+    `Hello, ${adminMatch.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`
   );
 }
 

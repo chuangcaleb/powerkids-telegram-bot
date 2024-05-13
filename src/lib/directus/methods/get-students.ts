@@ -1,5 +1,5 @@
 import { readItems } from "@directus/sdk";
-import { client } from "../base-client.js";
+import { client } from "../client.js";
 
 export function getStudents() {
   return client.request(

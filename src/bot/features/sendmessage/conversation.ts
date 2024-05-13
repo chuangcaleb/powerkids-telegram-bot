@@ -1,8 +1,5 @@
 import { Context } from "#root/bot/context.js";
-import {
-  catchException,
-  throwException,
-} from "#root/bot/helpers/conversation/throw-exception.js";
+import { catchException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
 import { getStudents } from "#root/lib/directus/methods/get-students.js";
@@ -21,16 +18,11 @@ export const SENDMESSAGE_CONVERSATION = "sendmessage";
 async function builder(conversation: Conversation<Context>, ctx: Context) {
   await conversation.run(i18n);
 
-  // catch empty students list
-  const students = await getStudents().catch(catchException(ctx));
-
-  if (students.length === 0)
-    throwException(ctx, "Attempted sendmessage w/ empty students list");
-
   // Get message
-  await ctx.reply("Enter the message you want to send");
-  const messageCtx = await waitFor(conversation, "message:text");
-  const message = messageCtx.msg.text;
+  await ctx.reply(
+    "Enter your broadcast message or (uncompressed) photo with caption"
+  );
+  const messageCtx = await waitFor(conversation, "message");
   await messageCtx.reply("↑ Forwarding this message ↑", {
     reply_parameters: { message_id: messageCtx.msg.message_id },
   });
@@ -41,6 +33,8 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await messageCtx.reply(
     `Next, enter a student's name, and send /done when you have listed them all`
   );
+
+  const students = await getStudents().catch(catchException(ctx));
 
   while (true) {
     const nameCtx = await waitFor(conversation, "message:text");
@@ -85,7 +79,9 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
     // if exactly 1, add to list, and then re-prompt
     const result = queryResults[0];
     // if no telegram_ids, then skip
-    const parents = await getStudentRegisteredParents(result);
+    const parents = await getStudentRegisteredParents(result).catch(
+      catchException(ctx)
+    );
     if (parents.length === 0) {
       await nameCtx.reply(
         `<b>${result.name}</b> no registered Telegram account to send to.\nEnter another name, or send /done`
@@ -112,8 +108,15 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   const targetTelegramIds = Object.keys(targets);
 
   const results = await Promise.allSettled(
-    targetTelegramIds.map((targetId) => ctx.api.sendMessage(targetId, message))
+    targetTelegramIds.map(async (targetId) =>
+      ctx.api.copyMessage(
+        targetId,
+        messageCtx.msg.from.id,
+        messageCtx.msg.message_id
+      )
+    )
   );
+
   const metaResults = results.map((result, index) => ({
     result,
     targetMeta: targets[targetTelegramIds[index]],

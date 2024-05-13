@@ -14,7 +14,7 @@ composer
   .use(sendmessageConversation())
   .command("sendmessage")
   .filter(
-    adminBoundary(false),
+    adminBoundary(),
     logHandle("command-sendmessage"),
     chatAction("typing"),
     (ctx) => ctx.conversation.enter(SENDMESSAGE_CONVERSATION)
