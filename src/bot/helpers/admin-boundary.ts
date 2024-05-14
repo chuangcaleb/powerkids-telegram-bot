@@ -1,6 +1,7 @@
 import { Context } from "#root/bot/context.js";
 import { client } from "#root/lib/directus/client.js";
 import { readUsers } from "@directus/sdk";
+import { NextFunction } from "grammy";
 
 export async function getCurrentAdmin(ctx: Context) {
   const sender = ctx.msg?.from?.id;
@@ -28,14 +29,16 @@ export async function checkIsAdmin(ctx: Context) {
 
 // shouldAdmin controls whether to flip the result
 export function adminBoundary(shouldAdmin: boolean = true) {
-  return async (ctx: Context) => {
+  return async (ctx: Context, next: NextFunction) => {
     const isAdmin = await checkIsAdmin(ctx);
     // if unauthorized, drop
-    if (!isAdmin && !shouldAdmin) {
+    if (isAdmin !== shouldAdmin) {
       ctx.logger.warn(ctx.message?.from, `Unauthorized attempt`);
-      ctx.reply("Not allowed");
+      ctx.reply("You are unauthorized to perform this action");
+      return;
     }
-    // Only return true if matches (XAND)
-    return isAdmin === shouldAdmin;
+
+    // else, next()
+    await next();
   };
 }

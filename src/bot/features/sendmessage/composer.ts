@@ -12,8 +12,8 @@ const composer = new Composer<Context>();
 
 composer
   .use(sendmessageConversation())
-  .command("sendmessage")
-  .filter(
+  .command(
+    "sendmessage",
     adminBoundary(),
     logHandle("command-sendmessage"),
     chatAction("typing"),

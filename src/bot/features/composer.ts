@@ -19,8 +19,6 @@ features.use(startFeature);
 features.use(helpFeature);
 features.use(authFeature);
 features.use(registerFeature);
-
-// Put admin features later to reduce checks for isAdmin
 features.use(setCommandsFeature);
 features.use(sendMessageFeature);
 

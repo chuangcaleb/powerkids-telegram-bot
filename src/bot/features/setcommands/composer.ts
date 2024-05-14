@@ -7,13 +7,12 @@ import { setCommandsHandler } from "./setcommands.js";
 
 const composer = new Composer<Context>();
 
-composer
-  .command("setcommands")
-  .filter(
-    adminBoundary(),
-    logHandle("command-setcommands"),
-    chatAction("typing"),
-    setCommandsHandler
-  );
+composer.command(
+  "setcommands",
+  adminBoundary(),
+  logHandle("command-setcommands"),
+  chatAction("typing"),
+  setCommandsHandler
+);
 
 export { composer as setCommandsFeature };
