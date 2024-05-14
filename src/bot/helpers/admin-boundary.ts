@@ -26,7 +26,7 @@ export async function checkIsAdmin(ctx: Context) {
   return !!(await getCurrentAdmin(ctx));
 }
 
-// isAdminTrue controls whether to flip the result
+// shouldAdmin controls whether to flip the result
 export function adminBoundary(shouldAdmin: boolean = true) {
   return async (ctx: Context) => {
     const isAdmin = await checkIsAdmin(ctx);
