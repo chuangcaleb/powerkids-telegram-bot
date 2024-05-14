@@ -9,7 +9,7 @@ import { registerFeature } from "./register/composer.js";
 import { sendMessageFeature } from "./sendmessage/composer.js";
 import { startFeature } from "./start.js";
 import { unhandledFeature } from "./unhandled.js";
-import { setCommandsFeature } from "./setcommands.js";
+import { setCommandsFeature } from "./setcommands/composer.js";
 
 const composer = new Composer<Context>();
 
