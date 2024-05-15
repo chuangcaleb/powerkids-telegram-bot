@@ -12,7 +12,7 @@ const composer = new Composer<Context>();
 composer
   .use(authenticateConversation())
   .command(
-    "authenticate",
+    "auth",
     logHandle("command-authenticate"),
     chatAction("typing"),
     (ctx) => ctx.conversation.enter(AUTHENTICATE_CONVERSATION)

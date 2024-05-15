@@ -13,7 +13,7 @@ const composer = new Composer<Context>();
 composer
   .use(sendmessageConversation())
   .command(
-    "sendmessage",
+    "sendmsg",
     adminBoundary(),
     logHandle("command-sendmessage"),
     chatAction("typing"),
