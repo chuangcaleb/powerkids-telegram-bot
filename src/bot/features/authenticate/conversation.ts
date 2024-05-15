@@ -9,6 +9,7 @@ import { client } from "#root/lib/directus/client.js";
 import { authenticateAdmin } from "#root/lib/directus/methods/authenticate-admin.js";
 import { readUser } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
+import { setAdminCommands } from "../setcommands/setcommands.js";
 
 export const AUTHENTICATE_CONVERSATION = "authenticate";
 
@@ -55,6 +56,7 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   }
 
   await authenticateAdmin(databaseId, idCtx.message.from.id);
+  await setAdminCommands(ctx, idCtx.message.from.id);
 
   await idCtx.reply(
     `Hello, ${adminMatch.first_name}. Successfully authenticated your Telegram account as an admin! Please Clear Chat History to delete the admin passphrase from it.`

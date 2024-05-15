@@ -1,6 +1,5 @@
 import type { Context } from "#root/bot/context.js";
 import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
-import { config } from "#root/config.js";
 import { BotCommand } from "@grammyjs/types";
 import { CommandContext } from "grammy";
 
@@ -55,6 +54,22 @@ function getPrivateAndLanguageCommands(localeCode: string): BotCommand[] {
   ];
 }
 
+function getAdminCommands(locale: string): BotCommand[] {
+  return [
+    ...getPrivateChatAdminCommands(locale),
+    ...getPrivateAndLanguageCommands(locale),
+  ];
+}
+
+export function setAdminCommands(ctx: Context, id: number) {
+  return ctx.api.setMyCommands(getAdminCommands(DEFAULT_LANGUAGE_CODE), {
+    scope: {
+      type: "chat",
+      chat_id: id,
+    },
+  });
+}
+
 // * No plans for group chat
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // function getGroupChatCommands(localeCode: string): BotCommand[] {
@@ -97,18 +112,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
   // }
 
   // set private chat commands for admins
-  await ctx.api.setMyCommands(
-    [
-      ...getPrivateChatAdminCommands(DEFAULT_LANGUAGE_CODE),
-      ...getPrivateAndLanguageCommands(DEFAULT_LANGUAGE_CODE),
-    ],
-    {
-      scope: {
-        type: "chat",
-        chat_id: Number(config.BOT_ADMINS),
-      },
-    }
-  );
+  // later: set languages according to locale
 
   return ctx.reply(ctx.t("admin.commands-updated"));
 }
