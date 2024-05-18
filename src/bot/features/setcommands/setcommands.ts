@@ -1,11 +1,7 @@
 import type { Context } from "#root/bot/context.js";
 import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
-import { config } from "#root/config.js";
-import { chatAction } from "@grammyjs/auto-chat-action";
 import { BotCommand } from "@grammyjs/types";
-import { CommandContext, Composer } from "grammy";
-import { adminBoundary } from "../helpers/admin-boundary.js";
-import { logHandle } from "../helpers/logging.js";
+import { CommandContext } from "grammy";
 
 const DEFAULT_LANGUAGE_CODE = "en";
 
@@ -27,11 +23,6 @@ export function getPrivateChatCommands(localeCode: string): BotCommand[] {
       description: "List available commands",
     },
     {
-      command: "register",
-      description:
-        "Verify your Telegram account to receive updates for your child",
-    },
-    {
       command: "cancel",
       description: "Cancel the current action",
     },
@@ -45,7 +36,7 @@ export function getPrivateChatAdminCommands(localeCode: string): BotCommand[] {
       description: i18n.t(localeCode, "setcommands_command.description"),
     },
     {
-      command: "sendmessage",
+      command: "sendmsg",
       description: "Broadcast a message to the parents of selected students",
     },
   ];
@@ -56,6 +47,22 @@ function getPrivateAndLanguageCommands(localeCode: string): BotCommand[] {
     ...getPrivateChatCommands(localeCode),
     ...(isMultipleLocales ? [getLanguageCommand(DEFAULT_LANGUAGE_CODE)] : []),
   ];
+}
+
+function getAdminCommands(locale: string): BotCommand[] {
+  return [
+    ...getPrivateChatAdminCommands(locale),
+    ...getPrivateAndLanguageCommands(locale),
+  ];
+}
+
+export function setAdminCommands(ctx: Context, id: number) {
+  return ctx.api.setMyCommands(getAdminCommands(DEFAULT_LANGUAGE_CODE), {
+    scope: {
+      type: "chat",
+      chat_id: id,
+    },
+  });
 }
 
 // * No plans for group chat
@@ -100,31 +107,7 @@ export async function setCommandsHandler(ctx: CommandContext<Context>) {
   // }
 
   // set private chat commands for admins
-  await ctx.api.setMyCommands(
-    [
-      ...getPrivateChatAdminCommands(DEFAULT_LANGUAGE_CODE),
-      ...getPrivateAndLanguageCommands(DEFAULT_LANGUAGE_CODE),
-    ],
-    {
-      scope: {
-        type: "chat",
-        chat_id: Number(config.BOT_ADMINS),
-      },
-    }
-  );
+  // later: set languages according to locale
 
   return ctx.reply(ctx.t("admin.commands-updated"));
 }
-
-const composer = new Composer<Context>();
-
-composer
-  .command("setcommands")
-  .filter(
-    adminBoundary(),
-    logHandle("command-setcommands"),
-    chatAction("typing"),
-    setCommandsHandler
-  );
-
-export { composer as setCommandsFeature };

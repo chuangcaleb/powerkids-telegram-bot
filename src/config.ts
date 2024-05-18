@@ -26,7 +26,9 @@ const createConfigFromEnvironment = (environment: NodeJS.ProcessEnv) => {
     BOT_ADMINS: z.array(z.number()).default([]),
     DIRECTUS_STATIC_TOKEN: z.string(),
     DIRECTUS_URL: z.string(),
-    ADMIN_PASSPHRASE: z.string(),
+    ENCRYPTION_METHOD: z.string(),
+    ENCRYPTION_KEY: z.string(),
+    LOCAL_SECRET: z.string(),
   });
 
   if (config.BOT_MODE === "webhook") {

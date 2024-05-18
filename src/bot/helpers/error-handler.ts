@@ -23,4 +23,8 @@ export const errorHandler: ErrorHandler<Context> = (error) => {
     err: error.error,
     update: getUpdateInfo(ctx),
   });
+
+  ctx.reply(
+    "An error occurred! It's logged into our system. Terminated action."
+  );
 };

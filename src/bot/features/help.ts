@@ -5,7 +5,7 @@ import { Composer } from "grammy";
 import {
   getPrivateChatAdminCommands,
   getPrivateChatCommands,
-} from "./setcommands.js";
+} from "./setcommands/setcommands.js";
 import { checkIsAdmin } from "../helpers/admin-boundary.js";
 
 const composer = new Composer<Context>();
