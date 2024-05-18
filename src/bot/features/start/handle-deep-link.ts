@@ -102,10 +102,10 @@ export async function handleDeepLink(ctx: Context, next: NextFunction) {
       updateItem("parent", id, { telegram_id: senderTelegramId })
     );
     await ctx.reply(
-      `Hello, ${parent.name}. Successfully authenticated your Telegram account as an admin!`
+      `Hello, ${parent.name}. Successfully linked your Telegram account to receive messages from the school!`
     );
     return;
   }
 
-  await ctx.reply("Wrong prefix!");
+  await ctx.reply(`Invalid prefix: ${prefix}`);
 }
