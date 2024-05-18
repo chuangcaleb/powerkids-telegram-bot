@@ -23,11 +23,6 @@ export function getPrivateChatCommands(localeCode: string): BotCommand[] {
       description: "List available commands",
     },
     {
-      command: "register",
-      description:
-        "Verify your Telegram account to receive updates for your child",
-    },
-    {
       command: "cancel",
       description: "Cancel the current action",
     },

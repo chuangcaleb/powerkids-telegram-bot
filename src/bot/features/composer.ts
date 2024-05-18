@@ -4,7 +4,6 @@ import { isMultipleLocales } from "../i18n.js";
 import { cancelFeature } from "./cancel.js";
 import { helpFeature } from "./help.js";
 import { languageFeature } from "./language.js";
-import { registerFeature } from "./register/composer.js";
 import { sendMessageFeature } from "./sendmessage/composer.js";
 import { setCommandsFeature } from "./setcommands/composer.js";
 import { startFeature } from "./start/composer.js";
@@ -16,7 +15,6 @@ const features = composer.chatType("private");
 
 features.use(startFeature);
 features.use(helpFeature);
-features.use(registerFeature);
 features.use(setCommandsFeature);
 features.use(sendMessageFeature);
 
