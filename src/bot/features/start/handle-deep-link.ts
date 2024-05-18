@@ -89,6 +89,13 @@ export async function handleDeepLink(ctx: Context, next: NextFunction) {
     // FIXME: annotate for FORBIDDEN matches
     // .catch(() => {});
 
+    if (parent.telegram_id && parent.telegram_id === String(senderTelegramId)) {
+      await ctx.reply(
+        `${parent.name}, you have already registered this Telegram account!`
+      );
+      return;
+    }
+
     // Break on no match
     if (!parent) {
       await ctx.reply(
@@ -102,7 +109,7 @@ export async function handleDeepLink(ctx: Context, next: NextFunction) {
       updateItem("parent", id, { telegram_id: senderTelegramId })
     );
     await ctx.reply(
-      `Hello, ${parent.name}. Successfully linked your Telegram account to receive messages from the school!`
+      `Hello, ${parent.name}. Successfully linked this Telegram account to receive messages from the school!`
     );
     return;
   }
