@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@directus/sdk':
-    specifier: ^16.0.0
-    version: 16.0.0
+    specifier: ^16.0.1
+    version: 16.0.1
   '@grammyjs/auto-chat-action':
     specifier: 0.1.1
     version: 0.1.1(grammy@1.23.0)
@@ -163,8 +163,8 @@ packages:
       which: 4.0.0
     dev: false
 
-  /@directus/sdk@16.0.0:
-    resolution: {integrity: sha512-DuY32oukjGj24tto27E/2P3z3kwrVtxhM5dqPaVF6GNT50IQVR5g4v+u5nq/6hlrUc8KNispTRFRN/JXRsxV5w==}
+  /@directus/sdk@16.0.1:
+    resolution: {integrity: sha512-tG9J5uBxJlzB8yoXv6Gin9PhxOoYKXsGEfr4LBNJ+jlFoqPmwlNOManJnUTqGbpNlGxH/7qv3CJyvZUXvo5hoA==}
     engines: {node: '>=18.0.0'}
     dependencies:
       '@directus/system-data': 1.0.3
