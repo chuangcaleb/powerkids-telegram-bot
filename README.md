@@ -1,16 +1,98 @@
 <h1 align="center">🤖 PowerKids Bot</h1>
 
-<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="https://powerkids.edu.my/images/logo.svg" style="background-color:white">
+<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="/docs/assets/powerkids-bot-logo.jpg" style="background-color:white">
 
 > A Telegram bot for PowerKids Kindergarten.
 
 ## Goals
 
-- Teachers can upload pictures (from their own devices) of students and select relevant student names
-- The bot will match the each selected student to their parents' Telegram ID via the school's internal registry
-- Parents will receive those pictures, notified by the mobile notifs
+- **Admins/Teachers can send broadcast messages or weekly pictures** (from the convenience of their own mobile devices) and select relevant student names
+- The bot will **match the each selected student to their parents**' Telegram account via the *school's internal database*
+- **Parents will receive those pictures**, sent by the bot, instantly notified by Telegram's mobile push notifications
+- **Users can effortlessly authenticate their unique identity & role with deeplinks**
+
+### Benefits
+
+1. No need for school staff to pass around a single company phone for communication
+    - Parallel communication increases efficiency
+    - School staff can handle their tasks according to their own schedule, not based on the common phone's availability
+2. Database replaces the manual record of parents' contacts to students' names
+    - Enforcing two-way anonymity and privacy because personal devices are obscured by the database layer,
+    - Reduces chance for human error, sending message to the wrong parent
+    - Ensures freshest data from database
+3. Instant push notifications on parents' mobile phones
+    - Quicker time-to-notification
+4. Flexible target listing
+    - Old system with WhatsApp was to either manually select contacts, or to send into a fixed group chat
+    - Now, any custom combination of targets can be selected per-message
 
 ## Usage
+
+1. Install Telegram on mobile or Web
+2. Enter your unique (deeplink) URL in your web browser, as provided by your Administrator
+3. As a parent, you will now automatically receive messages and pictures for your child(ren) by the school from the chatbot
+4. As a school staff, you can now use `/sendmsg` to write out a message/attach a picture, select students, and the parents of those selected students will receive your message.
+
+## Design
+
+### Auth Deeplink
+
+![telegram auth deeplink flowchart](docs/assets/telegram-auth.png)
+
+#### Pre-generating the deeplinks
+
+- Administrators trigger manual [Flow](https://docs.directus.io/app/flows.html) in Directus
+  - Uses a custom Operation extension
+- Plaintext includes:
+  - single-char prefix to identify between parent or admin auth
+  - unique identifying field of the record
+  - local secret (explained below)
+- Plaintext is encrypted for the payload, to prevent malicious users from authenticating
+  - initialization vector, if exists, may be prefixed before the ciphertext in the payload
+- Stores deeplink into an `auth_deeplinks` field for each record
+- Administrator can distribute the deeplinks according to a CMS view or export with the necessary fields
+
+#### Using deeplinks
+
+- Telegram has an inbuilt [deeplink](https://core.telegram.org/api/links) feature
+- We don't want bad actors to spam the `/start` route with random payloads, causing excessive CMS API calls and DB access
+  - We use a `LOCAL_SECRET`, shared between Directus CMS and the Bot
+  - When generating the deeplinks, we include the `LOCAL_SECRET` in the plaintext
+  - Later, when the bot receives a deeplink payload, it can locally decrypt and validate the `LOCAL_SECRET` segment before ever calling the CMS API
+  - Basically ensures that the deeplink payload is genuinely created by us, even if the other segments of the plaintext are invalid
+- Telegram's deeplinks only allow a `base64url`-charset & maximum 64-character payload
+  - This severely limits the entropy of our payload, and thus limits the length of our plaintext
+  - Have to be very economical to be able to derive a unique record and enforce tight security, while adhering to the 64-character payload limit
+- Invalidating deeplinks are just a matter of regenerating the `LOCAL_SECRET` value
+  - This invalidates all deeplinks, globally
+  - Current implementation has not enough entropy to fit Telegram's payload limitations while having a unique Initialization Vector field for each user, in order to invalidate a specific user's link — this is currently outside MVP, may be enhanced later
+
+> Note: This isn't the exact implementation, certain details are tweaked for obscurity purposely
+
+### Send Message
+
+#### Process
+
+- Admin initiates the flow with `/sendmsg` command
+  - Checks for admin status
+- Admin attaches a message or picture with caption
+- Admin selects a list of students
+  - Bot communicates with the database to pull records of the parents' Telegram ID of the queried student
+  - Bot gives error feedback if:
+    - if query is not found in database
+    - if student has no parents who have already registered
+- Admin sends `/done` to finish the input
+- The bot forwards the message to each target on the list
+- The bot returns feedback on the operation
+
+#### Considerations
+
+- by simply forwarding the message, we don't need to store the message in memory
+- each child may have multiple parents, and each parent may have multiple children
+  - when selecting a child, it should send to both parents
+  - when selecting siblings, it should deduplicate calls
+
+## Developing
 
 Follow these steps to set up and run your bot using this template:
 
@@ -78,32 +160,54 @@ Follow these steps to set up and run your bot using this template:
 
 ### Directory Structure
 
-```
+```filetree
 project-root/
-  ├── locales # Localization files
+  ├── api
+  │   └── server # Serverless entry point
+  ├── locales # Localization files (currently unused)
   └── src
       ├── bot # Contains the code related to the bot
       │   ├── callback-data # Callback data builders
       │   ├── features      # Implementations of bot features
-      │   ├── filters       # Update filters
+      │   │     └── (feature)
+      │   │            ├── composer.ts # entry point for the directory
+      │   │            └── conversation.ts # conversation handler
       │   ├── handlers      # Update handlers
       │   ├── helpers       # Utility functions
-      │   ├── keyboards     # Keyboard builders
+      │   ├── keyboards     # Keyboard builders (currently unused)
       │   ├── middlewares   # Middleware functions
       │   ├── i18n.ts       # Internationalization setup
       │   ├── context.ts    # Context object definition
       │   └── index.ts      # Bot entry point
+      │
       ├── server # Contains the code related to the web server
       │   └── index.ts # Web server entry point
+      ├── lib    # Utility modules
+      │   ├── directus # Directus SDK abstractions
+      │   └── *        # Whatever other utility modules
       ├── config.ts # Application config
       ├── logger.ts # Logging setup
-      └── main.ts   # Application entry point
+      └── main.ts   # Application entry point (local)
 ```
 
-## Tech
+## Tech Stack
 
-- Framework: [grammY](https://grammy.dev/)
-- Template: [bot-base/telegram-bot-template](https://github.com/bot-base/telegram-bot-template)
+![system architecture](docs/assets/system-architecture.png)
+
+- Frontend:
+  - Mobile Client: [Telegram](https://telegram.org/)
+- Backend (bot):
+  - Template: [bot-base/telegram-bot-template](https://github.com/bot-base/telegram-bot-template)
+    - Telegram Framework: [grammY](https://grammy.dev/)
+    - Server Framework: [fastify](https://fastify.dev/)
+    - Logger: [pino](https://github.com/pinojs/pino)
+  - Infrastructure: [Vercel](https://vercel.com/)
+- Backend (db):
+  - CMS: [Directus](https://directus.io/)
+  - Database: [postgres](https://www.postgresql.org/)
+  - Container: [Docker](https://www.docker.com/)
+  - Infrastructure: [Railway](https://railway.app/)
+  - Domain: [Exabytes](https://www.exabytes.com/) *(.edu.my)*
 
 ## Environment Variables
 
@@ -150,7 +254,7 @@ project-root/
     <td>
         <i>Optional.</i>
         Specifies method to receive incoming updates. (<code>polling</code> or <code>webhook</code>)
-        Defaults to <code>polling</code>.
+        Defaults to <code>polling</code>. (You should use webhook in <b>production</b> environment)
     </td>
   </tr>
   <tr>
@@ -194,16 +298,69 @@ project-root/
     </td>
   </tr>
   <tr>
-    <td>BOT_ADMINS</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  </tr>
+  <tr>
+    <td>DIRECTUS_STATIC_TOKEN</td>
     <td>
-        Array of Number
+        String
     </td>
     <td>
-        <i>Optional.</i>
-        Administrator user IDs.
-        Use this to specify user IDs that have special privileges, such as executing <code>/setcommands</code>. <br/>
-        Defaults to an empty array.
+      Static token from the Telegram dummy user in Directus, configured with appropriate limited permissions
+    </td>
+  </tr>
+  <tr>
+    <td>DIRECTUS_URL</td>
+    <td>
+        String
+    </td>
+    <td>
+      Public base URL to access the Directus API
+    </td>
+  </tr>
+  <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  </tr>
+  <tr>
+    <td>ENCRYPTION_METHOD</td>
+    <td>
+        String
+    </td>
+    <td>
+      An algorithm from
+      <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#supported_algorithms">Web Cryptography API: SubtleCrypt supported algorithms</a>
+    </td>
+  </tr>
+  <tr>
+    <td>ENCRYPTION_KEY</td>
+    <td>
+        String
+    </td>
+    <td>
+      Shared decryption key between bot and CMS to decode deeplink payloads
+    </td>
+  </tr>
+  <tr>
+    <td>LOCAL_SECRET</td>
+    <td>
+        String
+    </td>
+    <td>
+      Shared secret between bot and CMS to validate deeplink payloads (locally)
     </td>
   </tr>
 </tbody>
 </table>
+
+## Future Work
+
+1. Select a group of students with a filter defined in Directus Presets
+2. Screening system for principals to vet quality of messages before they go out
+3. Send more than one message, a series of messages
+4. Accountability logs in CMS
+    - messages sent out
+    - error logs
