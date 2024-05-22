@@ -23,8 +23,13 @@ export async function getCurrentAdmin(ctx: Context) {
   return admins[0];
 }
 
-export async function checkIsAdmin(ctx: Context) {
-  return !!(await getCurrentAdmin(ctx));
+export async function checkIsAdmin(ctx: Context, throwError: boolean = false) {
+  try {
+    return !!(await getCurrentAdmin(ctx));
+  } catch (error) {
+    if (throwError) throw error;
+    return false;
+  }
 }
 
 // shouldAdmin controls whether to flip the result
