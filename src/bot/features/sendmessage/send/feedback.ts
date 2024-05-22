@@ -1,9 +1,6 @@
 import { MessageId } from "@grammyjs/types";
 import { TargetMeta } from "../types.js";
 
-// type SendMessageSettledPromise = PromiseSettledResult<
-//   Message.CommonMessage & MessageXFragment & Message
-// >;
 export interface MetaResult {
   result: PromiseSettledResult<MessageId>;
   targetMeta: TargetMeta;
