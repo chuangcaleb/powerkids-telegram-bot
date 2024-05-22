@@ -63,7 +63,7 @@
 - Telegram's deeplinks only allow a `base64url`-charset & maximum 64-character payload
   - This severely limits the entropy of our payload, and thus limits the length of our plaintext
   - Have to be very economical to be able to derive a unique record and enforce tight security, while adhering to the 64-character payload limit
-- Invalidating deeplinks are just a matter of regenerating the `LOCAL_SECRET` value
+- Invalidating deeplinks is just a matter of regenerating the `LOCAL_SECRET` value
   - This invalidates all deeplinks, globally
   - Current implementation has not enough entropy to fit Telegram's payload limitations while having a unique Initialization Vector field for each user, in order to invalidate a specific user's link — this is currently outside MVP, may be enhanced later
 
