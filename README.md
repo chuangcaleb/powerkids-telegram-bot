@@ -2,7 +2,7 @@
 
 <img align="right" alt="PowerKids Kindergarten logo" width="38%" src="/docs/assets/powerkids-bot-logo.jpg" >
 
-> Official Telegram bot 🤖 of PowerKids Kindergarten. Handles communication to parents from the school.
+> Official Telegram bot of PowerKids Kindergarten. Handles communication to parents from the school.
 
 ## 🎯 Goals
 
@@ -17,8 +17,9 @@
     - Parallel communication increases efficiency
     - School staff can handle their tasks according to their own schedule, not based on the common phone's availability
 2. Database replaces the manual record of parents' contacts to students' names
-    - Enforcing two-way anonymity and privacy because personal devices are obscured by the database layer,
+    - Enforces two-way anonymity and privacy because personal devices are obscured by the database layer,
     - Reduces chance for human error, sending message to the wrong parent
+    - Centralizes single source of data
     - Ensures freshest data from database
 3. Instant push notifications on parents' mobile phones
     - Quicker time-to-notification
