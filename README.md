@@ -1,17 +1,17 @@
 <h1 align="center">🤖 PowerKids Bot</h1>
 
-<img align="right" alt="PowerKids Kindergarten logo" width="35%" src="/docs/assets/powerkids-bot-logo.jpg" style="background-color:white">
+<img align="right" alt="PowerKids Kindergarten logo" width="38%" src="/docs/assets/powerkids-bot-logo.jpg" >
 
-> A Telegram bot for PowerKids Kindergarten.
+> Official Telegram bot 🤖 of PowerKids Kindergarten. Handles communication to parents from the school.
 
-## Goals
+## 🎯 Goals
 
 - **Admins/Teachers can send broadcast messages or weekly pictures** (from the convenience of their own mobile devices) and select relevant student names
 - The bot will **match the each selected student to their parents**' Telegram account via the *school's internal database*
 - **Parents will receive those pictures**, sent by the bot, instantly notified by Telegram's mobile push notifications
 - **Users can effortlessly authenticate their unique identity & role with deeplinks**
 
-### Benefits
+### ✅ Benefits
 
 1. No need for school staff to pass around a single company phone for communication
     - Parallel communication increases efficiency
@@ -26,14 +26,14 @@
     - Old system with WhatsApp was to either manually select contacts, or to send into a fixed group chat
     - Now, any custom combination of targets can be selected per-message
 
-## Usage
+## 🏁 Usage
 
 1. Install Telegram on mobile or Web
 2. Enter your unique (deeplink) URL in your web browser, as provided by your Administrator
 3. As a parent, you will now automatically receive messages and pictures for your child(ren) by the school from the chatbot
 4. As a school staff, you can now use `/sendmsg` to write out a message/attach a picture, select students, and the parents of those selected students will receive your message.
 
-## Design
+## 🎨 Design
 
 ### Auth Deeplink
 
@@ -92,7 +92,26 @@
   - when selecting a child, it should send to both parents
   - when selecting siblings, it should deduplicate calls
 
-## Developing
+## 🏗️ Architecture / Tech Stack
+
+![system architecture](docs/assets/system-architecture.png)
+
+- Frontend:
+  - Mobile Client: [Telegram](https://telegram.org/)
+- Backend (bot):
+  - Template: [bot-base/telegram-bot-template](https://github.com/bot-base/telegram-bot-template)
+    - Telegram Framework: [grammY](https://grammy.dev/)
+    - Server Framework: [fastify](https://fastify.dev/)
+    - Logger: [pino](https://github.com/pinojs/pino)
+  - Infrastructure: [Vercel](https://vercel.com/)
+- Backend (db):
+  - CMS: [Directus](https://directus.io/)
+  - Database: [postgres](https://www.postgresql.org/)
+  - Container: [Docker](https://www.docker.com/)
+  - Infrastructure: [Railway](https://railway.app/)
+  - Domain: [Exabytes](https://www.exabytes.com/) *(.edu.my)*
+
+## 🔧 Developing
 
 Follow these steps to set up and run your bot using this template:
 
@@ -190,26 +209,7 @@ project-root/
       └── main.ts   # Application entry point (local)
 ```
 
-## Tech Stack
-
-![system architecture](docs/assets/system-architecture.png)
-
-- Frontend:
-  - Mobile Client: [Telegram](https://telegram.org/)
-- Backend (bot):
-  - Template: [bot-base/telegram-bot-template](https://github.com/bot-base/telegram-bot-template)
-    - Telegram Framework: [grammY](https://grammy.dev/)
-    - Server Framework: [fastify](https://fastify.dev/)
-    - Logger: [pino](https://github.com/pinojs/pino)
-  - Infrastructure: [Vercel](https://vercel.com/)
-- Backend (db):
-  - CMS: [Directus](https://directus.io/)
-  - Database: [postgres](https://www.postgresql.org/)
-  - Container: [Docker](https://www.docker.com/)
-  - Infrastructure: [Railway](https://railway.app/)
-  - Domain: [Exabytes](https://www.exabytes.com/) *(.edu.my)*
-
-## Environment Variables
+### Environment Variables
 
 <table>
 <thead>
@@ -356,7 +356,7 @@ project-root/
 </tbody>
 </table>
 
-## Future Work
+## 🗺️ Future Work
 
 1. Select a group of students with a filter defined in Directus Presets
 2. Screening system for principals to vet quality of messages before they go out
