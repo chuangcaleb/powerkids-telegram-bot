@@ -24,8 +24,8 @@ dependencies:
     specifier: 1.10.0
     version: 1.10.0(grammy@1.23.1)
   '@grammyjs/types':
-    specifier: 3.7.0
-    version: 3.7.0
+    specifier: 3.8.0
+    version: 3.8.0
   callback-data:
     specifier: 1.1.1
     version: 1.1.1
@@ -506,6 +506,10 @@ packages:
 
   /@grammyjs/types@3.7.0:
     resolution: {integrity: sha512-/q8XVwSB7LrN1w1RSaUffO6gYyi5PHOBq1cbLHqDYiy994BxDKVD5N18viWac8Z014UGG2X+s9Fgs7cxsr0q8g==}
+    dev: false
+
+  /@grammyjs/types@3.8.0:
+    resolution: {integrity: sha512-5r2rUJ/s939iQEt6j2gyl1owbWwKAYAg2gQH7FfWIP1swL2assZ97vRUl8cBU3UEp7es9c/VioWeQjKbV6g4eg==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
