@@ -4,3 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      grammy:
+        applies-to: version-updates
+        patterns:
+          - "*grammy*"
