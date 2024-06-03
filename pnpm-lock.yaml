@@ -10,19 +10,19 @@ dependencies:
     version: 16.0.2
   '@grammyjs/auto-chat-action':
     specifier: 0.1.1
-    version: 0.1.1(grammy@1.24.0)
+    version: 0.1.1(grammy@1.24.1)
   '@grammyjs/conversations':
     specifier: ^1.2.0
-    version: 1.2.0(grammy@1.24.0)
+    version: 1.2.0(grammy@1.24.1)
   '@grammyjs/hydrate':
     specifier: 1.4.1
-    version: 1.4.1(grammy@1.24.0)
+    version: 1.4.1(grammy@1.24.1)
   '@grammyjs/i18n':
     specifier: 1.0.2
-    version: 1.0.2(grammy@1.24.0)
+    version: 1.0.2(grammy@1.24.1)
   '@grammyjs/parse-mode':
     specifier: 1.10.0
-    version: 1.10.0(grammy@1.24.0)
+    version: 1.10.0(grammy@1.24.1)
   '@grammyjs/types':
     specifier: 3.8.0
     version: 3.8.0
@@ -39,11 +39,11 @@ dependencies:
     specifier: ^7.0.0
     version: 7.0.0
   grammy:
-    specifier: 1.24.0
-    version: 1.24.0
+    specifier: 1.24.1
+    version: 1.24.1
   grammy-guard:
     specifier: 0.5.0
-    version: 0.5.0(grammy@1.24.0)
+    version: 0.5.0(grammy@1.24.1)
   iso-639-1:
     specifier: 3.1.2
     version: 3.1.2
@@ -418,7 +418,7 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.5
       espree: 10.0.1
       globals: 14.0.0
       ignore: 5.3.1
@@ -469,38 +469,38 @@ packages:
     engines: {node: '>=12.0.0', npm: '>=7.0.0'}
     dev: false
 
-  /@grammyjs/auto-chat-action@0.1.1(grammy@1.24.0):
+  /@grammyjs/auto-chat-action@0.1.1(grammy@1.24.1):
     resolution: {integrity: sha512-70Jdy+keIri4452tluaZpKtHag5gD8pNczoXqajsnsx7pJC5wg3DAQ5unpt0xJb8KsVBAGWuJb298SBl3TVecg==}
     peerDependencies:
       grammy: ^1.0.0
     dependencies:
-      grammy: 1.24.0
+      grammy: 1.24.1
     dev: false
 
-  /@grammyjs/conversations@1.2.0(grammy@1.24.0):
+  /@grammyjs/conversations@1.2.0(grammy@1.24.1):
     resolution: {integrity: sha512-d06nGFPlcea4UqjOcxCm5rwiV74bZQVUWQl3YVQp5TwC0oCHNK+PXgqaKkVgkfcYSMyx3dADRBuBkcGt+yiyDA==}
     engines: {node: ^12.20.0 || >=14.13.1}
     peerDependencies:
       grammy: ^1.20.1
     dependencies:
       debug: 4.3.4
-      grammy: 1.24.0
+      grammy: 1.24.1
       o-son: 1.0.4
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@grammyjs/hydrate@1.4.1(grammy@1.24.0):
+  /@grammyjs/hydrate@1.4.1(grammy@1.24.1):
     resolution: {integrity: sha512-xvd7XXoVHEhxBV2M8UHDRYkZlv32JioHfs+0l+eN34mkJJJBchuRDgRY3fkVJko8o1hGFHHLAJJTlEs2OAMolA==}
     engines: {node: ^12.20.0 || >=14.13.1}
     peerDependencies:
       grammy: ^1.20.1
     dependencies:
       abort-controller: 3.0.0
-      grammy: 1.24.0
+      grammy: 1.24.1
     dev: false
 
-  /@grammyjs/i18n@1.0.2(grammy@1.24.0):
+  /@grammyjs/i18n@1.0.2(grammy@1.24.1):
     resolution: {integrity: sha512-F/6jBB+afp8N3aXLmxTqdlffqD20EZBMFrPiVQNz6YoiKvjAe4Q8rSrU0Y4eQXkUj4e+UNl7yvYvvPSa1h4guw==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -509,16 +509,16 @@ packages:
       '@deno/shim-deno': 0.18.2
       '@fluent/bundle': 0.17.1
       '@fluent/langneg': 0.6.2
-      grammy: 1.24.0
+      grammy: 1.24.1
     dev: false
 
-  /@grammyjs/parse-mode@1.10.0(grammy@1.24.0):
+  /@grammyjs/parse-mode@1.10.0(grammy@1.24.1):
     resolution: {integrity: sha512-ZjbY2Ax0b4Nf8lPz3NV0cWDxUC10kOkzgxws+iTdgG+hAiPQVUnP/oJnAKrW1ZQOWULZYQ4GOR/+aCZHyUuLQA==}
     engines: {node: '>=14.13.1'}
     peerDependencies:
       grammy: ^1.20.1
     dependencies:
-      grammy: 1.24.0
+      grammy: 1.24.1
     dev: false
 
   /@grammyjs/types@3.8.0:
@@ -911,7 +911,7 @@ packages:
     dependencies:
       '@fastify/error': 3.4.1
       archy: 1.0.0
-      debug: 4.3.4
+      debug: 4.3.5
       fastq: 1.17.1
     transitivePeerDependencies:
       - supports-color
@@ -1161,7 +1161,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: false
 
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
@@ -2003,17 +2002,17 @@ packages:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
     dev: true
 
-  /grammy-guard@0.5.0(grammy@1.24.0):
+  /grammy-guard@0.5.0(grammy@1.24.1):
     resolution: {integrity: sha512-vGqrEJPpm5XnaTkklkb/luLdo+qNZX78Fr9CwLdPFEUymYByqlxU/h+NKEmzsNHzC9lc+rS8oR+xQo1Wo5Ogxg==}
     peerDependencies:
       grammy: ^1.10.0
     dependencies:
       callback-data: 1.1.1
-      grammy: 1.24.0
+      grammy: 1.24.1
     dev: false
 
-  /grammy@1.24.0:
-    resolution: {integrity: sha512-cHeUC4jOwqEF4405b0phwr40IwIzudDSBHsSni5z6JyI7u3xCYpvD+11FOmxjgjrk9L9xEumC6VKL1yR1LRWTA==}
+  /grammy@1.24.1:
+    resolution: {integrity: sha512-0ijKmqL1wlxIk+Zml4qZDXTbacWFf9IEmTPAjvNpl5jpaarkE7SOxst1gDb0ZmySAPimzvP2vH4rc0IhwexSOA==}
     engines: {node: ^12.20.0 || >=14.13.1}
     dependencies:
       '@grammyjs/types': 3.8.0
