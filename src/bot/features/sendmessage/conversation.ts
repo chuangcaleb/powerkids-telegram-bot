@@ -2,12 +2,9 @@ import { Context } from "#root/bot/context.js";
 import { catchException } from "#root/bot/helpers/conversation/throw-exception.js";
 import { waitFor } from "#root/bot/helpers/conversation/wait-for.js";
 import { i18n } from "#root/bot/i18n.js";
-import { client } from "#root/lib/directus/client.js";
 import { getStudents } from "#root/lib/directus/methods/get-students.js";
 import { Student } from "#root/lib/directus/types-gen.js";
-import { readPresets } from "@directus/sdk";
 import { Conversation, createConversation } from "@grammyjs/conversations";
-import { InlineKeyboard } from "grammy";
 import { getFilteredRegistry } from "./search/get-filtered-registry.js";
 import { pickSubstring } from "./search/pick-substring.js";
 import { getQueryResults } from "./search/query.js";
@@ -29,33 +26,6 @@ async function builder(conversation: Conversation<Context>, ctx: Context) {
   await messageCtx.reply("↑ Forwarding this message ↑", {
     reply_parameters: { message_id: messageCtx.msg.message_id },
   });
-
-  // inline keyboard between filter group or manual
-  const keyboard = new InlineKeyboard().text("Yes", "y").text("No", "n");
-  await ctx.reply("Do you want to select students with a filter group?", {
-    reply_markup: keyboard,
-  });
-  const response = await conversation.waitForCallbackQuery(["y", "n"], {
-    otherwise: (octx) =>
-      octx.reply("Use the buttons!", { reply_markup: keyboard }),
-  });
-
-  // handle filter group/preset
-  if (response.match === "y") {
-    ctx.reply("y");
-    const presets = await client.request(
-      readPresets({
-        fields: ["bookmark", "filter", "search"],
-        filter: {
-          collection: { _eq: "student" },
-          bookmark: { _ends_with: ">" },
-        },
-      })
-    );
-    console.log(presets);
-  } else {
-    ctx.reply("B");
-  }
 
   // Get targets
   // TODO: allow comma/newline-delimited bulk input
