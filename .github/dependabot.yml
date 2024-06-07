@@ -3,7 +3,11 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      day: "monday"
+      interval: "weekly"
+      time: "03:00"
+      timezone: "Asia/Kuala_Lumpur"
+
     groups:
       grammy:
         applies-to: version-updates
