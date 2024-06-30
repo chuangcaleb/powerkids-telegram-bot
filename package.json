@@ -29,7 +29,7 @@
     "@grammyjs/types": "3.8.1",
     "callback-data": "1.1.1",
     "dotenv": "16.4.5",
-    "fastify": "4.28.0",
+    "fastify": "4.28.1",
     "fuse.js": "^7.0.0",
     "grammy": "1.24.1",
     "grammy-guard": "0.5.0",
