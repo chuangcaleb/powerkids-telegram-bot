@@ -13,22 +13,22 @@ importers:
         version: 16.1.1
       '@grammyjs/auto-chat-action':
         specifier: 0.1.1
-        version: 0.1.1(grammy@1.24.1)
+        version: 0.1.1(grammy@1.27.0)
       '@grammyjs/conversations':
         specifier: ^1.2.0
-        version: 1.2.0(grammy@1.24.1)
+        version: 1.2.0(grammy@1.27.0)
       '@grammyjs/hydrate':
         specifier: 1.4.1
-        version: 1.4.1(grammy@1.24.1)
+        version: 1.4.1(grammy@1.27.0)
       '@grammyjs/i18n':
         specifier: 1.0.2
-        version: 1.0.2(grammy@1.24.1)
+        version: 1.0.2(grammy@1.27.0)
       '@grammyjs/parse-mode':
         specifier: 1.10.0
-        version: 1.10.0(grammy@1.24.1)
+        version: 1.10.0(grammy@1.27.0)
       '@grammyjs/types':
-        specifier: 3.8.1
-        version: 3.8.1
+        specifier: 3.11.0
+        version: 3.11.0
       callback-data:
         specifier: 1.1.1
         version: 1.1.1
@@ -42,11 +42,11 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       grammy:
-        specifier: 1.24.1
-        version: 1.24.1
+        specifier: 1.27.0
+        version: 1.27.0
       grammy-guard:
         specifier: 0.5.0
-        version: 0.5.0(grammy@1.24.1)
+        version: 0.5.0(grammy@1.27.0)
       iso-639-1:
         specifier: 3.1.2
         version: 3.1.2
@@ -360,11 +360,8 @@ packages:
     peerDependencies:
       grammy: ^1.20.1
 
-  '@grammyjs/types@3.8.0':
-    resolution: {integrity: sha512-5r2rUJ/s939iQEt6j2gyl1owbWwKAYAg2gQH7FfWIP1swL2assZ97vRUl8cBU3UEp7es9c/VioWeQjKbV6g4eg==}
-
-  '@grammyjs/types@3.8.1':
-    resolution: {integrity: sha512-2atGlWCgvSrJr+xDJBzVvCS4DT7LE/Yxim1lmGdSaYjyh968U1tKpDv8NK8qs+V9xnMtwxmId2W1h2Oc8J6ShA==}
+  '@grammyjs/types@3.11.0':
+    resolution: {integrity: sha512-LBIH8VnSEoeOHJxfvNFQ8QEsRip7D6GhY7y0evMl9W5FQ8p3q3bcYrtO2awxo1rSpi9RcoCKX1icQ60kXkp7+w==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -1129,8 +1126,8 @@ packages:
     peerDependencies:
       grammy: ^1.10.0
 
-  grammy@1.24.1:
-    resolution: {integrity: sha512-0ijKmqL1wlxIk+Zml4qZDXTbacWFf9IEmTPAjvNpl5jpaarkE7SOxst1gDb0ZmySAPimzvP2vH4rc0IhwexSOA==}
+  grammy@1.27.0:
+    resolution: {integrity: sha512-gonaKzEEJ+yjpqb/eGuIi2hsCRd+Oeu9fU4AzpvnrMf9U5ju/oRQ+Vnhx3sOtvO+kvwpeRJ4pv577I5SoMcQ0Q==}
     engines: {node: ^12.20.0 || >=14.13.1}
 
   graphemer@1.4.0:
@@ -2165,7 +2162,7 @@ snapshots:
   '@eslint/eslintrc@2.1.4':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.5
+      debug: 4.3.4
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -2212,42 +2209,40 @@ snapshots:
 
   '@fluent/langneg@0.6.2': {}
 
-  '@grammyjs/auto-chat-action@0.1.1(grammy@1.24.1)':
+  '@grammyjs/auto-chat-action@0.1.1(grammy@1.27.0)':
     dependencies:
-      grammy: 1.24.1
+      grammy: 1.27.0
 
-  '@grammyjs/conversations@1.2.0(grammy@1.24.1)':
+  '@grammyjs/conversations@1.2.0(grammy@1.27.0)':
     dependencies:
       debug: 4.3.4
-      grammy: 1.24.1
+      grammy: 1.27.0
       o-son: 1.0.4
     transitivePeerDependencies:
       - supports-color
 
-  '@grammyjs/hydrate@1.4.1(grammy@1.24.1)':
+  '@grammyjs/hydrate@1.4.1(grammy@1.27.0)':
     dependencies:
       abort-controller: 3.0.0
-      grammy: 1.24.1
+      grammy: 1.27.0
 
-  '@grammyjs/i18n@1.0.2(grammy@1.24.1)':
+  '@grammyjs/i18n@1.0.2(grammy@1.27.0)':
     dependencies:
       '@deno/shim-deno': 0.18.2
       '@fluent/bundle': 0.17.1
       '@fluent/langneg': 0.6.2
-      grammy: 1.24.1
+      grammy: 1.27.0
 
-  '@grammyjs/parse-mode@1.10.0(grammy@1.24.1)':
+  '@grammyjs/parse-mode@1.10.0(grammy@1.27.0)':
     dependencies:
-      grammy: 1.24.1
+      grammy: 1.27.0
 
-  '@grammyjs/types@3.8.0': {}
-
-  '@grammyjs/types@3.8.1': {}
+  '@grammyjs/types@3.11.0': {}
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.5
+      debug: 4.3.4
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3199,14 +3194,14 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  grammy-guard@0.5.0(grammy@1.24.1):
+  grammy-guard@0.5.0(grammy@1.27.0):
     dependencies:
       callback-data: 1.1.1
-      grammy: 1.24.1
+      grammy: 1.27.0
 
-  grammy@1.24.1:
+  grammy@1.27.0:
     dependencies:
-      '@grammyjs/types': 3.8.0
+      '@grammyjs/types': 3.11.0
       abort-controller: 3.0.0
       debug: 4.3.5
       node-fetch: 2.7.0
